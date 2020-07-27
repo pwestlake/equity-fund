@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { SummaryComponent } from './views/summary/summary.component';
 
-const routes: Routes = [];
-
+const routes: Routes = [
+  { path: 'summary', component: SummaryComponent },
+  { path: 'equity-fund/ui',
+    redirectTo: 'summary',
+    pathMatch: 'prefix'
+  },
+];
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
