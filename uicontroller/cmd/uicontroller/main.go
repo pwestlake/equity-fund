@@ -34,9 +34,18 @@ func main() {
 	contextRoutes := routes.InitializeContextRoutes()
 
 	r := mux.NewRouter()
+	// GET /title
     r.Handle("/equity-fund/uicontroller/title", 
 		jwtMiddleware.Handler(http.HandlerFunc(contextRoutes.GetTitle))).Methods(http.MethodGet)
-		
+	
+	// POST /equitycatalogitem
+
+	// GET /equitycatalogitem/{id}
+
+	// GET /equitycatalogitem/
+
+	// DELETE /equitycatalogitem/{id}
+	
 	log.Println("Listening on port: ", port)
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }
