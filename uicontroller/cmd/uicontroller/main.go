@@ -32,6 +32,7 @@ func main() {
 	}
 	
 	contextRoutes := routes.InitializeContextRoutes()
+	equityCatalogRoutes := routes.InitializeEquityCatalogRoutes()
 
 	r := mux.NewRouter()
 	// GET /title
@@ -39,13 +40,20 @@ func main() {
 		jwtMiddleware.Handler(http.HandlerFunc(contextRoutes.GetTitle))).Methods(http.MethodGet)
 	
 	// POST /equitycatalogitem
+	r.Handle("/equity-fund/uicontroller/equitycatalogitem", 
+		jwtMiddleware.Handler(http.HandlerFunc(equityCatalogRoutes.PostEquityCatalogItem))).Methods(http.MethodPost)
+
 
 	// GET /equitycatalogitem/{id}
+	r.Handle("/equity-fund/uicontroller/equitycatalogitem/{id}", 
+		jwtMiddleware.Handler(http.HandlerFunc(equityCatalogRoutes.GetEquityCatalogItem))).Methods(http.MethodGet)
 
 	// GET /equitycatalogitem/
+	r.Handle("/equity-fund/uicontroller/equitycatalogitem/", 
+		jwtMiddleware.Handler(http.HandlerFunc(equityCatalogRoutes.GetAllEquityCatalogItems))).Methods(http.MethodGet)
 
 	// DELETE /equitycatalogitem/{id}
-	
+
 	log.Println("Listening on port: ", port)
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }

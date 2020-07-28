@@ -7,11 +7,22 @@ package routes
 
 import (
 	"github.com/pwestlake/aemo/userservice/pkg/entitlements"
+	"github.com/pwestlake/equity-fund/uicontroller/pkg/dao"
+	"github.com/pwestlake/equity-fund/uicontroller/pkg/service"
 )
+
 // Injectors from wire.go:
 
 func InitializeContextRoutes() ContextRoutes {
 	entitlementsEntitlements := entitlements.NewEntitlements()
 	contextRoutes := NewContextRoutes(entitlementsEntitlements)
 	return contextRoutes
+}
+
+func InitializeEquityCatalogRoutes() EquityCatalogRoutes {
+	entitlementsEntitlements := entitlements.NewEntitlements()
+	equityCatalogItemDAO := dao.NewEquityCatalogItemDAO()
+	equityCatalogService := service.NewEquityCatalogService(equityCatalogItemDAO)
+	equityCatalogRoutes := NewEquityCatalogRoutes(entitlementsEntitlements, equityCatalogService)
+	return equityCatalogRoutes
 }
