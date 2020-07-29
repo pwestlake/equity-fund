@@ -1,10 +1,10 @@
 package routes
 
 import (
-	"github.com/pwestlake/equity-fund/uicontroller/pkg/domain"
+	"github.com/pwestlake/equity-fund/commons/pkg/domain"
 	"github.com/pwestlake/aemo/userservice/pkg/entitlements"
 	"github.com/pwestlake/aemo/userservice/pkg/config"
-	"github.com/pwestlake/equity-fund/uicontroller/pkg/service"
+	"github.com/pwestlake/equity-fund/commons/pkg/service"
 	commons "github.com/pwestlake/equity-fund/commons/pkg/service"
 	"github.com/gorilla/mux"
 	"net/http"

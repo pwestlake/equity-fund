@@ -7,8 +7,8 @@ package routes
 
 import (
 	"github.com/pwestlake/aemo/userservice/pkg/entitlements"
-	"github.com/pwestlake/equity-fund/uicontroller/pkg/dao"
-	"github.com/pwestlake/equity-fund/uicontroller/pkg/service"
+	"github.com/pwestlake/equity-fund/commons/pkg/dao"
+	"github.com/pwestlake/equity-fund/commons/pkg/service"
 )
 
 // Injectors from wire.go:
