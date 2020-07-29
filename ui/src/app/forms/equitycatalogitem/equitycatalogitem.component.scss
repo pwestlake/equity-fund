@@ -1,0 +1,12 @@
+app-equitycatalogitem {
+    flex-grow: 1;
+
+    .mat-tab-body-wrapper {
+        flex-grow: 1;
+    }
+
+    .main-content {
+        height: 100%;
+        padding: 16px;
+    }
+}

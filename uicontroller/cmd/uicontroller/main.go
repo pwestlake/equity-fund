@@ -49,7 +49,7 @@ func main() {
 		jwtMiddleware.Handler(http.HandlerFunc(equityCatalogRoutes.GetEquityCatalogItem))).Methods(http.MethodGet)
 
 	// GET /equitycatalogitem/
-	r.Handle("/equity-fund/uicontroller/equitycatalogitem/", 
+	r.Handle("/equity-fund/uicontroller/equitycatalogitem", 
 		jwtMiddleware.Handler(http.HandlerFunc(equityCatalogRoutes.GetAllEquityCatalogItems))).Methods(http.MethodGet)
 
 	// DELETE /equitycatalogitem/{id}

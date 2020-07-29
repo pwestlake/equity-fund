@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/google/uuid"
 )
 
 // EquityCatalogItemDAO ...
@@ -43,6 +44,9 @@ func (s *EquityCatalogItemDAO) PutEquityCatalogItem(equityCatalogItem *domain.Eq
 	dbSession := session.Must(session.NewSession())
 	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
 
+	if (len(equityCatalogItem.ID) == 0) {
+		equityCatalogItem.ID = uuid.New().String()
+	}
 	if (equityCatalogItem.DateCreated == time.Time{}) {
 		equityCatalogItem.DateCreated = time.Now()
 	}

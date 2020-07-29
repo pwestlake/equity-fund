@@ -1,0 +1,98 @@
+<div fxLayout="column" fxFlex="1 0 auto">
+    <mat-tab-group #tabs color="accent" backgroundColor="primary" style="width:100vw"
+        dynamicHeight="true"
+        paginationDisabled="false"
+        fxFlex="1 0 auto">
+
+        <!-- Add iten to Equity Catalog -->
+        <mat-tab label="Add Equity" fxFlex="1 0 auto">
+            <!-- Back button -->
+            <div class="tab-tools-container">
+                <div class="tab-tools-button-group" fxLayoutAlign="space-around center">
+                    <a mat-icon-button mat-icon-no-color matTooltip="Add item" routerLink="..">
+                        <mat-icon>arrow_back</mat-icon>
+                    </a>
+                </div>
+            </div>
+
+            <!-- New Equity Form-->
+            <form [formGroup]="equityForm" (ngSubmit)="onSubmit()" 
+                fxLayout="column" fxFlex="1 0 auto" class="main-content"
+                fxLayoutAlign="space-between start"
+                autocomplete="off">
+    
+                <mat-form-field style="width: 300px">
+                    <mat-label>Symbol</mat-label>
+                    <input id="symbol" matInput formControlName="symbol" />
+                    <mat-error *ngIf="equityForm.controls.symbol.invalid && (equityForm.controls.symbol.dirty || equityForm.controls.symbol.touched)">
+                        <mat-error *ngIf="equityForm.controls.symbol.errors.required">
+                            Value is required.
+                        </mat-error>
+                        <mat-error *ngIf="equityForm.controls.symbol.errors.pattern">
+                            Equity symbol pattern required: *.XLON
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>LSE TIDM</mat-label>
+                    <input id="lsetidm" matInput formControlName="lsetidm" />
+                    <mat-error *ngIf="equityForm.controls.lsetidm.invalid && (equityForm.controls.lsetidm.dirty || equityForm.controls.lsetidm.touched)">
+                        <mat-error *ngIf="equityForm.controls.lsetidm.errors.required">
+                            Value is required.
+                        </mat-error>
+                        <mat-error *ngIf="equityForm.controls.lsetidm.errors.pattern">
+                            LSE Symbol needed
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field style="width: 400px">
+                    <mat-label>Issuer Name</mat-label>
+                    <input id="lseissuername" matInput formControlName="lseissuername" />
+                    <mat-error *ngIf="equityForm.controls.lseissuername.invalid && (equityForm.controls.lseissuername.dirty || equityForm.controls.lseissuername.touched)">
+                        <mat-error *ngIf="equityForm.controls.lseissuername.errors.required">
+                            Value is required.
+                        </mat-error>
+                        <mat-error *ngIf="equityForm.controls.lseissuername.errors.maxlength">
+                            Name should be less than 40 characters
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field style="width: 400px">
+                    <mat-label>LSE TabId</mat-label>
+                    <input id="lsetabid" matInput formControlName="lsetabid" />
+                    <mat-error *ngIf="equityForm.controls.lsetabid.invalid && (equityForm.controls.lsetabid.dirty || equityForm.controls.lsetabid.touched)">
+                        <mat-error *ngIf="equityForm.controls.lsetabid.errors.required">
+                            Value is required.
+                        </mat-error>
+                        <mat-error *ngIf="equityForm.controls.lsetabid.errors.pattern">
+                            Pattern should be similar to: abcdefgh-1234-1234-1234-abcdefghijkl
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field style="width: 400px"> 
+                    <mat-label>LSE ComponentId</mat-label>
+                    <input id="lsecomponentid" matInput formControlName="lsecomponentid" />
+                    <mat-error *ngIf="equityForm.controls.lsecomponentid.invalid && (equityForm.controls.lsecomponentid.dirty || equityForm.controls.lsecomponentid.touched)">
+                        <mat-error *ngIf="equityForm.controls.lsecomponentid.errors.required">
+                            Value is required.
+                        </mat-error>
+                        <mat-error *ngIf="equityForm.controls.lsecomponentid.errors.pattern">
+                            Pattern should be similar to: abcdefgh-1234-1234-1234-abcdefghijkl
+                        </mat-error>
+                    </mat-error>
+                </mat-form-field>
+
+                <div fxFlex="1 0 auto" style="width: 100%" fxLayoutAlign="end end">
+                    <button mat-button [disabled]="equityForm.invalid" type="submit">Submit</button>
+                </div>
+            </form>
+
+        
+        </mat-tab>
+    </mat-tab-group>
+</div>
+

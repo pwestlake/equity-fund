@@ -15,3 +15,50 @@ body {
     flex: 1 1 auto;
     flex-direction: column;
 }
+
+.table-header-row {
+    height: 56px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.table-header-cell:first-of-type {
+    padding-left: 24px;
+}
+
+.table-header-cell {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.table-row {
+    height: 48px;
+    font-size: 14px;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+
+.table-cell:first-of-type {
+    padding-left: 24px;
+}
+
+.mat-tab-header {
+    padding-right: 106px;
+    //background-color: mat-color($primary);
+}
+
+.tab-tools-container {
+    position: fixed;
+    width: 100vw;
+    height: 48px;
+}
+
+.tab-tools-button-group {
+    color: white;
+    float: right;
+    margin-top: -48px;
+    height: 48px;
+    padding-right: 16px;
+    padding-left: 16px;
+}

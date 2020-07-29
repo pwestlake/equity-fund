@@ -50,6 +50,7 @@ func (p *EquityCatalogRoutes) PostEquityCatalogItem(w http.ResponseWriter, r *ht
 				Body: fmt.Sprintf("Unable to persist EquityCatalogItem %s. Error: %s", equityCatalogItem.ID, err.Error())}
 		}
 		
+		log.Printf("Created EquityCatalogItem %s", equityCatalogItem.ID)
 		return &service.HTTPSuccessResponse{Body: []byte(fmt.Sprintf(`{"id":"%s"}`, equityCatalogItem.ID))}
 	}
 
@@ -85,7 +86,7 @@ func (p *EquityCatalogRoutes) GetEquityCatalogItem(w http.ResponseWriter, r *htt
 }
 
 // GetAllEquityCatalogItems ...
-// Handler function for the path: /equitycatalogitem/{id}
+// Handler function for the path: /equitycatalogitems
 func (p *EquityCatalogRoutes) GetAllEquityCatalogItems(w http.ResponseWriter, r *http.Request) {
 	getAllEquityCatalogItems := func(w http.ResponseWriter, r *http.Request) service.HTTPResponse {
 		
