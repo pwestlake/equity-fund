@@ -1,0 +1,36 @@
+<div fxLayout="column" fxFlex="1 1 auto">
+    <mat-tab-group #tabs color="accent" backgroundColor="primary" style="width:100vw;"
+        dynamicHeight="true"
+        paginationDisabled="false"
+        fxFlex="1 1 auto">
+
+        <!-- Equity Catalog -->
+        <mat-tab label="Equity Catalog">
+            <!-- Add item button -->
+            <div class="tab-tools-container">
+                <div class="tab-tools-button-group" fxLayoutAlign="space-around center">
+                    <a mat-icon-button mat-icon-no-color matTooltip="Add item" routerLink="equitycatalogitemform">
+                        <mat-icon>add</mat-icon>
+                    </a>
+                </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="space-around center" class="table-header-row">
+                <div class="table-header-cell" fxFlex>ID</div>
+                <div class="table-header-cell" fxFlex> Symbol</div>
+                <div class="table-header-cell" fxFlex> Issuer Name</div>
+            </div>
+        
+            <cdk-virtual-scroll-viewport itemSize="48" minBufferPx="640" maxBufferPx="800" class="table-container table-body">
+            
+                <div fxLayout="row" fxLayoutAlign="space-between center" class="table-row" 
+                    *cdkVirtualFor="let item of equityCatalog | async">
+                    <div class="table-cell" fxFlex>{{ item.id }}</div>
+                    <div class="table-cell" fxFlex>{{ item.symbol }}</div>
+                    <div class="table-cell" fxFlex>{{ item.lseissuername }}</div>
+                </div>
+    
+            </cdk-virtual-scroll-viewport>
+        </mat-tab>
+    </mat-tab-group>
+</div>
