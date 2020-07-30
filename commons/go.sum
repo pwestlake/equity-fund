@@ -27,6 +27,7 @@ github.com/pwestlake/aemo v0.0.0-20200724092340-114ed6aaf5ad h1:Y/NjVgX3i13egBS0
 github.com/pwestlake/aemo/userservice v0.0.0-20200724092340-114ed6aaf5ad h1:sdAMcG4nU3pgkTHAgvupcjkH0F5sgBb20VF4dm8WNVY=
 github.com/pwestlake/aemo/userservice v0.0.0-20200724092340-114ed6aaf5ad/go.mod h1:YEdh1fdrvLWZ6om/N9Bphtt4PwKer/vSX3C+wyAMokk=
 github.com/pwestlake/equity-fund v0.0.0-20200724085550-0cd593c47e48 h1:WMdQln5i6Tgc7c2Piu7sJNhhZWYRCQRXq84Icv4rgzU=
+github.com/pwestlake/equity-fund v0.0.0-20200729132006-b499b4e2abd7 h1:hxIkmHXREPoAWs3Dw+a1pmJPF9Qu+RxiwP4HoFyKtJE=
 github.com/pwestlake/equity-fund/uicontroller v0.0.0-20200729130511-a44b11ba430a h1:Hx1fGBvmuxrCRSOP2Ecvh+l4+a6q72eJuHNyGs3LKuE=
 github.com/pwestlake/equity-fund/uicontroller v0.0.0-20200729130511-a44b11ba430a/go.mod h1:muLCiQjAZpxx0YJPySQSP9gbTqwZQmm2ufCK8XVhtJ8=
 github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1:OnSkiWE9lh6wB0YB77sQom3nweQdgAjqCqsofrRNTgc=
