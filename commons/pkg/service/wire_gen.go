@@ -17,7 +17,7 @@ func InitializeEquityCatalogService() EquityCatalogService {
 	return equityCatalogService
 }
 
-func InitializeEEndOfDayService() EndOfDayService {
+func InitializeEndOfDayService() EndOfDayService {
 	endOfDayItemDAO := dao.NewEndOfDayItemDAO()
 	endOfDayService := NewEndOfDayService(endOfDayItemDAO)
 	return endOfDayService

@@ -12,7 +12,7 @@ func InitializeEquityCatalogService() EquityCatalogService {
 	return EquityCatalogService{}
 }
 
-func InitializeEEndOfDayService() EndOfDayService {
+func InitializeEndOfDayService() EndOfDayService {
 	wire.Build(NewEndOfDayService, dao.NewEndOfDayItemDAO)
 	return EndOfDayService{}
 }
