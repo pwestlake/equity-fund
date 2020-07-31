@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"log"
 	"strings"
 	"time"
 )
@@ -64,12 +65,13 @@ type SourceTime struct {
 }
 
 // Mon Jan 2 15:04:05 -0700 MST 2006
-const ctLayout = "2006-01-02T15:04:05+0000"
+const ctLayout = "2006-01-02T15:04:05-0700"
 
 // UnmarshalJSON ...
 // Unmarshal the date format in the source data to that for time.Time
 func (st *SourceTime) UnmarshalJSON(b []byte) error {
-    s := strings.Trim(string(b), "\"")
+	s := strings.Trim(string(b), "\"")
+	log.Printf("%s\n", s)
     if s == "null" {
 		st.Time = time.Time{}
        return nil
