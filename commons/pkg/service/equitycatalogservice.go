@@ -18,9 +18,15 @@ func NewEquityCatalogService(equityCatalogItemDao dao.EquityCatalogItemDAO) Equi
 }
 
 // GetEquityCatalogItem ...
-// Service method to retrieve a user with the given id from the database
+// Service method to retrieve an item with the given id from the database
 func (s *EquityCatalogService) GetEquityCatalogItem(id string, equityCatalogItem *domain.EquityCatalogItem) error {
 	return s.equityCatalogItemDao.GetEquityCatalogItem(id, equityCatalogItem)
+}
+
+// GetEquityCatalogItemsBySymbol ...
+// Service method to retrieve all items with the given symbol from the database
+func (s *EquityCatalogService) GetEquityCatalogItemsBySymbol(symbol string) (*[]domain.EquityCatalogItem, error) {
+	return s.equityCatalogItemDao.GetEquityCatalogItemsBySymbol(symbol)
 }
 
 // GetAllEquityCatalogItems ...

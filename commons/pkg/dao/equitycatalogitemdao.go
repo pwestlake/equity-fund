@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	"github.com/google/uuid"
 )
 
@@ -112,5 +113,43 @@ func (s *EquityCatalogItemDAO) GetEquityCatalogItems() (*[]domain.EquityCatalogI
 			}
 		}
 	}
+	return &equityCatalogItems, err
+}
+
+// GetEquityCatalogItemsBySymbol ...
+// DAO method to retrieve EquityCatalogItems by symbol
+func (s *EquityCatalogItemDAO) GetEquityCatalogItemsBySymbol(symbol string) (*[]domain.EquityCatalogItem, error) {
+	var equityCatalogItems []domain.EquityCatalogItem
+	var err error
+	dbSession := session.Must(session.NewSession())
+	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
+
+	filter := expression.Name("symbol").Equal(expression.Value(symbol))
+	expr, err := expression.NewBuilder().WithFilter(filter).Build()
+	if err != nil {
+		return nil, err
+	}
+
+	params := &dynamodb.ScanInput{
+		TableName: aws.String("EquityCatalog"),
+		FilterExpression: expr.Filter(),
+	}
+
+	result, err := client.Scan(params)
+	if err != nil {
+		return nil, err
+	}
+
+	equityCatalogItems = make([]domain.EquityCatalogItem, len(result.Items))
+		for i, item := range result.Items {
+			equityCatalogItem := domain.EquityCatalogItem{}
+			err = dynamodbattribute.UnmarshalMap(item, &equityCatalogItem)
+			if err != nil {
+				break;
+			} else {
+				equityCatalogItems[i] = equityCatalogItem
+			}
+		}
+
 	return &equityCatalogItems, err
 }
