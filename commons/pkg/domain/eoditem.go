@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"strings"
 	"time"
 )
 
@@ -26,19 +27,19 @@ type EndOfDayItem struct {
 // EndOfDaySourceItem ...
 // Domain struct for an EndOfDaySourceItem
 type EndOfDaySourceItem struct {
-	Open      float32   `json:"open"`
-	High      float32   `json:"high"`
-	Low       float32   `json:"low"`
-	Close     float32   `json:"close"`
-	Volume    int64     `json:"volume"`
-	AdjHigh   float32   `json:"adj_high"`
-	AdjLow    float32   `json:"adj_low"`
-	AdjClose  float32   `json:"adj_close"`
-	AdjOpen   float32   `json:"adj_open"`
-	AdjVolume int64     `json:"adj_volume"`
-	Symbol    string    `json:"symbol"`
-	Exchange  string    `json:"exchange"`
-	Date      time.Time `json:"date"`
+	Open      float32    `json:"open"`
+	High      float32    `json:"high"`
+	Low       float32    `json:"low"`
+	Close     float32    `json:"close"`
+	Volume    int64      `json:"volume"`
+	AdjHigh   float32    `json:"adj_high"`
+	AdjLow    float32    `json:"adj_low"`
+	AdjClose  float32    `json:"adj_close"`
+	AdjOpen   float32    `json:"adj_open"`
+	AdjVolume int64      `json:"adj_volume"`
+	Symbol    string     `json:"symbol"`
+	Exchange  string     `json:"exchange"`
+	Date      SourceTime `json:"date"`
 }
 
 // PageDescriptor ...
@@ -52,6 +53,29 @@ type PageDescriptor struct {
 
 // EndOfDayDataExtract ...
 type EndOfDayDataExtract struct {
-	Pagination PageDescriptor `json:"pagination"`
-	Data []EndOfDaySourceItem `json:"data"`
+	Pagination PageDescriptor       `json:"pagination"`
+	Data       []EndOfDaySourceItem `json:"data"`
+}
+
+// SourceTime ...
+// Time representing the time format in the MarketStack response
+type SourceTime struct {
+	time.Time
+}
+
+// Mon Jan 2 15:04:05 -0700 MST 2006
+const ctLayout = "2006-01-02T15:04:05+0000"
+
+// UnmarshalJSON ...
+// Unmarshal the date format in the source data to that for time.Time
+func (st *SourceTime) UnmarshalJSON(b []byte) error {
+    s := strings.Trim(string(b), "\"")
+    if s == "null" {
+		st.Time = time.Time{}
+       return nil
+	}
+	
+	var err error
+    st.Time, err = time.Parse(ctLayout, s)
+    return err
 }
