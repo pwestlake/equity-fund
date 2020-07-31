@@ -132,6 +132,7 @@ func (s *EquityCatalogItemDAO) GetEquityCatalogItemsBySymbol(symbol string) (*[]
 
 	params := &dynamodb.ScanInput{
 		TableName: aws.String("EquityCatalog"),
+		ExpressionAttributeValues: expr.Values(),
 		FilterExpression: expr.Filter(),
 	}
 
