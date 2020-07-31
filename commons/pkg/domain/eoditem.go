@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"log"
 	"strings"
 	"time"
 )
@@ -71,7 +70,7 @@ const ctLayout = "2006-01-02T15:04:05-0700"
 // Unmarshal the date format in the source data to that for time.Time
 func (st *SourceTime) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), "\"")
-	log.Printf("%s\n", s)
+	
     if s == "null" {
 		st.Time = time.Time{}
        return nil
