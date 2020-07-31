@@ -13,7 +13,7 @@ type EndOfDayItem struct {
 	High      float32   `json:"high"`
 	Low       float32   `json:"low"`
 	Close     float32   `json:"close"`
-	Volume    int64     `json:"volume"`
+	Volume    float32    `json:"volume"`
 	AdjHigh   float32   `json:"adj_high"`
 	AdjLow    float32   `json:"adj_low"`
 	AdjClose  float32   `json:"adj_close"`
