@@ -26,7 +26,13 @@ func (s *EndOfDayService) PutEndOfDayItems(items *[]domain.EndOfDayItem) error {
 }
 
 // GetEndOfDayItems ...
-// Service methof to retrieve aan array of EndOfDayItems according to the given id and from date
+// Service method to retrieve an array of EndOfDayItems according to the given id and from date
 func (s *EndOfDayService) GetEndOfDayItems(id string, from time.Time) (*[]domain.EndOfDayItem, error) {
 	return s.endOfDayItemDaoDao.GetEndOfDayItems(id, from)
+}
+
+// GetLatestItem ...
+// Service method to retrieve the latest eod item for a given id
+func (s *EndOfDayService) GetLatestItem(id string) (*domain.EndOfDayItem, error) {
+	return s.endOfDayItemDaoDao.GetLatestItem(id)
 }
