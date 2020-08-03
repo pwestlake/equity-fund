@@ -72,10 +72,12 @@ func (s *EndOfDayItemDAO) GetEndOfDayItems(id string, from time.Time) (*[]domain
 		":date": &dynamodb.AttributeValue{S: aws.String(from.String())},
 	}
 
+
 	queryInput := dynamodb.QueryInput {
 		TableName: aws.String("EndOfDay"),
 		ExpressionAttributeValues: expressionAttributeValues,
-		KeyConditionExpression: aws.String("id = :id AND date >= :date"),
+		ExpressionAttributeNames: map[string]*string {"#d": aws.String("date")},
+		KeyConditionExpression: aws.String("id = :id AND #d >= :date"),
 	}
 
 	resp, err := client.Query(&queryInput)
