@@ -112,7 +112,7 @@ func (s *EndOfDayItemDAO) GetLatestItem(id string) (*domain.EndOfDayItem, error)
 		return &domain.EndOfDayItem{}, err
 	}
 
-	err = dynamodbattribute.UnmarshalListOfMaps(resp.Items,  &endOfDayItem)
+	err = dynamodbattribute.UnmarshalMap(resp.Items[0],  &endOfDayItem)
 	
 	return &endOfDayItem, err
 }
