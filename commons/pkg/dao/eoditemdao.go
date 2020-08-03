@@ -87,3 +87,32 @@ func (s *EndOfDayItemDAO) GetEndOfDayItems(id string, from time.Time) (*[]domain
 	
 	return &endOfDayItems, err
 }
+
+// GetLatestItem ...
+// Retrieve the latest item for the given key id
+func (s *EndOfDayItemDAO) GetLatestItem(id string) (*domain.EndOfDayItem, error){
+	var endOfDayItem = domain.EndOfDayItem{}
+	dbSession := session.Must(session.NewSession())
+	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
+
+	expressionAttributeValues := map[string]*dynamodb.AttributeValue {
+		":id": &dynamodb.AttributeValue{S: aws.String(id)},
+	}
+
+	queryInput := dynamodb.QueryInput {
+		TableName: aws.String("EndOfDay"),
+		ExpressionAttributeValues: expressionAttributeValues,
+		Limit: aws.Int64(1),
+		ScanIndexForward: aws.Bool(false),
+		KeyConditionExpression: aws.String("id = :id"),
+	}
+
+	resp, err := client.Query(&queryInput)
+	if err != nil {
+		return &domain.EndOfDayItem{}, err
+	}
+
+	err = dynamodbattribute.UnmarshalListOfMaps(resp.Items,  &endOfDayItem)
+	
+	return &endOfDayItem, err
+}
