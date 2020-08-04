@@ -18,3 +18,8 @@ func InitializeEquityCatalogRoutes() EquityCatalogRoutes {
 	wire.Build(NewEquityCatalogRoutes, entitlements.NewEntitlements, service.NewEquityCatalogService, dao.NewEquityCatalogItemDAO)
 	return EquityCatalogRoutes{}
 }
+
+func InitializeEndOfDayRoutes() EndOfDayRoutes {
+	wire.Build(NewEndOfDayRoutes, entitlements.NewEntitlements, service.NewEndOfDayService, dao.NewEndOfDayItemDAO)
+	return EndOfDayRoutes{}
+}

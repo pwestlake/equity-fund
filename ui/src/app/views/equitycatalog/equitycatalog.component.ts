@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./equitycatalog.component.scss']
 })
 export class EquitycatalogComponent implements OnInit {
-  equityCatalog: Observable<EquityCatalogItem>;
+  equityCatalog: Observable<EquityCatalogItem[]>;
 
   constructor(private equityCatalogService: EquitycatalogService) { }
 

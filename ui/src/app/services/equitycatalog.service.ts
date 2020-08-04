@@ -27,7 +27,7 @@ export class EquitycatalogService {
     );
   }
 
-  getAllEquityCatalogItems(): Observable<EquityCatalogItem> {
-    return this.http.get<EquityCatalogItem>(`${environment.host}/equity-fund/uicontroller/equitycatalogitem`);
+  getAllEquityCatalogItems(): Observable<EquityCatalogItem[]> {
+    return this.http.get<EquityCatalogItem[]>(`${environment.host}/equity-fund/uicontroller/equitycatalogitem`);
   }
 }

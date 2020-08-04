@@ -34,6 +34,10 @@ github.com/pwestlake/equity-fund/commons v0.0.0-20200729130511-a44b11ba430a h1:Z
 github.com/pwestlake/equity-fund/commons v0.0.0-20200729130511-a44b11ba430a/go.mod h1:RLasOq5YPRozjNQd6Od/qEJffPD1UAfTQ117XE0VSCs=
 github.com/pwestlake/equity-fund/commons v0.0.0-20200729132006-b499b4e2abd7 h1:hmZwOvjE9OvVmpkBy8F7TNCtbISHBDHNHHCng2NyJU4=
 github.com/pwestlake/equity-fund/commons v0.0.0-20200729132006-b499b4e2abd7/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200803122248-44c6df6ccd5c h1:wb9O1YUIY/hmuvdQD9wvUJ3dBV07bRYIKeYSgBaxm6A=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200803122248-44c6df6ccd5c/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200803162646-590d17e7540b h1:iX8ILRmFJZnVTjbxpReS67O6jTBXU2dydmOLGHAC7PY=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200803162646-590d17e7540b/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
 github.com/pwestlake/equity-fund/uicontroller v0.0.0-20200729130511-a44b11ba430a/go.mod h1:muLCiQjAZpxx0YJPySQSP9gbTqwZQmm2ufCK8XVhtJ8=
 github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1:OnSkiWE9lh6wB0YB77sQom3nweQdgAjqCqsofrRNTgc=
 github.com/smartystreets/assertions v1.1.0/go.mod h1:tcbTF8ujkAEcZ8TElKY+i30BzYlVhC/LOxJk7iOWnoo=

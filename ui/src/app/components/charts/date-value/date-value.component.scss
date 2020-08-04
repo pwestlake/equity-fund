@@ -1,0 +1,42 @@
+@import '~@angular/material/theming';
+
+app-date-value {
+    $primary: mat-palette($mat-indigo);
+    $accent: mat-palette($mat-pink, A200, A100, A400);
+
+    .bar {
+        fill: mat-color($primary, 400);
+    }
+    
+    .bar:hover {
+        fill: mat-color($accent, A200);
+    }
+    
+    .axis-x path {
+        display: none;
+    }
+
+    .tooltip {
+        position: absolute;			
+        text-align: center;			
+        width: 120px;					
+        height: 60px;					
+        padding: 2px;				
+        font: 12px sans-serif;		
+        background: lightsteelblue;	
+        border: 0px;		
+        border-radius: 8px;			
+        pointer-events: none;			
+    }
+
+    .tool-container {
+        position: relative;
+        top: -48px;
+        height: 0px;
+    }
+
+    .chart-container {
+        position: relative;
+        top: -40px;
+    }
+}

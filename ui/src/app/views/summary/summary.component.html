@@ -1,1 +1,11 @@
-<div fxFlex="1 1 auto">sdfsfd</div>
+<div fxFlex="1 1 auto">
+    <mat-card *ngFor="let item of catalog | async" class="chart" fxLayout="column">
+        <mat-card-header>
+            <mat-card-title>{{item.symbol}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content fxFlex="1 0 auto">
+            <app-date-value fxFlex="1 0 auto" 
+                [data]='closePriceChart(item.id) |async'></app-date-value>
+        </mat-card-content>
+    </mat-card>
+</div>

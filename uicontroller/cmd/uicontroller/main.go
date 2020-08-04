@@ -33,6 +33,7 @@ func main() {
 	
 	contextRoutes := routes.InitializeContextRoutes()
 	equityCatalogRoutes := routes.InitializeEquityCatalogRoutes()
+	endOfDayRoutes := routes.InitializeEndOfDayRoutes()
 
 	r := mux.NewRouter()
 	// GET /title
@@ -53,6 +54,10 @@ func main() {
 		jwtMiddleware.Handler(http.HandlerFunc(equityCatalogRoutes.GetAllEquityCatalogItems))).Methods(http.MethodGet)
 
 	// DELETE /equitycatalogitem/{id}
+
+	// GET /timeseries/close/{id}
+	r.Handle("/equity-fund/uicontroller/timeseries/close/{id}", 
+		jwtMiddleware.Handler(http.HandlerFunc(endOfDayRoutes.GetClosePriceTimeSeries))).Methods(http.MethodGet)
 
 	log.Println("Listening on port: ", port)
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))

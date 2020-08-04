@@ -1,0 +1,21 @@
+<div fxFlex="1 1 auto" fxLayout="column">
+    <div class="tool-container" fxLayout="row" fxLayoutAlign="end">
+        <button #zoomInButton mat-icon-button  [disabled] = "isMaxYUndefined()" (click)="zoomIn()">
+            <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button #zoomOutButton mat-icon-button  [disabled] = "!setHeightButton.disabled" (click)="zoomOut()">
+            <mat-icon>zoom_out</mat-icon>
+        </button>
+        <button #setHeightButton mat-icon-button  [disabled] = "!isMaxYUndefined()" (click)="setHeightBar(this)">
+            <mat-icon>height</mat-icon>
+        </button>
+        <button mat-icon-button  (click)="maximized()">
+            <mat-icon>aspect_ration</mat-icon>
+        </button>
+        <button mat-icon-button  (click)="minimized()">
+            <mat-icon>view_quilt</mat-icon>
+        </button>
+    </div>
+    <div fxFlex="1 1 auto" #chart></div>
+</div>
+

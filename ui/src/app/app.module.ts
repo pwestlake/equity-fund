@@ -8,6 +8,7 @@ import { ContextProvider } from './providers/context.provider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -19,6 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SummaryComponent } from './views/summary/summary.component';
+import { DateValueComponent } from './components/charts/date-value/date-value.component';
 import { EquitycatalogComponent } from './views/equitycatalog/equitycatalog.component';
 import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycatalogitem.component';
 
@@ -26,6 +28,7 @@ import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycata
   declarations: [
     AppComponent,
     SummaryComponent,
+    DateValueComponent,
     EquitycatalogComponent,
     EquitycatalogitemComponent
   ],
@@ -37,6 +40,7 @@ import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycata
     FlexLayoutModule,
     FormsModule,
     MatButtonModule,
+    MatCardModule,
     MatIconModule,
     MatInputModule,
     MatListModule,

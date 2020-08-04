@@ -26,3 +26,11 @@ func InitializeEquityCatalogRoutes() EquityCatalogRoutes {
 	equityCatalogRoutes := NewEquityCatalogRoutes(entitlementsEntitlements, equityCatalogService)
 	return equityCatalogRoutes
 }
+
+func InitializeEndOfDayRoutes() EndOfDayRoutes {
+	entitlementsEntitlements := entitlements.NewEntitlements()
+	endOfDayItemDAO := dao.NewEndOfDayItemDAO()
+	endOfDayService := service.NewEndOfDayService(endOfDayItemDAO)
+	endOfDayRoutes := NewEndOfDayRoutes(entitlementsEntitlements, endOfDayService)
+	return endOfDayRoutes
+}
