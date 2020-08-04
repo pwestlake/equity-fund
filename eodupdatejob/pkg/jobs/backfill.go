@@ -40,15 +40,13 @@ func (s *BackFillJob) Run(symbol string) {
 		return
 	}
 
-	item := (*catalogItems)[0]
-
 	source, err := s.dataService.GetData(symbol)
 	if err != nil {
 		log.Printf("Failed to source data: %s", err.Error())
 		return
 	}
 
-	target := buildTarget(source, item.ID)
+	target := buildTarget(source, catalogItems)
 
 	err = s.endOfDayService.PutEndOfDayItems(target)
 	if err != nil {
@@ -71,43 +69,55 @@ func (s *BackFillJob) UpdateWithLatest() {
 		return
 	}
 
-	for _, v := range *catalogItems {
-		eodItem, err := s.endOfDayService.GetLatestItem(v.ID)
-		if err != nil {
-			log.Printf("Failed to get latest item for %s, %s", v.ID, err.Error())
-			break;
-		}
-
-		fromDate := eodItem.Date.AddDate(0, 0, 1)
-		log.Printf("Updating: %s, %s from %s", v.ID, v.Symbol, fromDate.String())
-		source, err := s.dataService.GetDataFromDate(v.Symbol, fromDate)
-
-		if err != nil {
-			log.Printf("Failed to source data: %s", err.Error())
-			return
-		}
-	
-		target := buildTarget(source, v.ID)
-	
-		err = s.endOfDayService.PutEndOfDayItems(target)
-		if err != nil {
-			log.Printf("Failed to persist end of day data for %s", v.Symbol)
-		}
-
-		plural := ""
-		if len(*target) > 1 ||  len(*target) == 0{
-			plural = "s"
-		}
-		log.Printf("Found and persisted %d new eod item%s for %s", len(*target), plural, v.Symbol)
+	// Find the date of the last update and derive the 'from' date
+	// Assume that all items were updated at the same time
+	eodItem, err := s.endOfDayService.GetLatestItem((*catalogItems)[0].ID)
+	if err != nil {
+		log.Printf("Failed to get latest item for %s, %s. Aborting", (*catalogItems)[0].ID, err.Error())
+		return
 	}
+
+	fromDate := eodItem.Date.AddDate(0, 0, 1)
+
+	// Build an array of symbols
+	symbols := make([]string, len(*catalogItems))
+	for i, v := range *catalogItems {
+		symbols[i] = v.Symbol
+	}
+
+	log.Printf("Updating %d items from %s", len(*catalogItems), fromDate.String())
+	source, err := s.dataService.GetDataFromDate(symbols, fromDate)
+
+	if err != nil {
+		log.Printf("Failed to source data: %s", err.Error())
+		return
+	}
+
+	target := buildTarget(source, catalogItems)
+
+	err = s.endOfDayService.PutEndOfDayItems(target)
+	if err != nil {
+		log.Printf("Failed to persist end of day data")
+	}
+
+	plural := ""
+	if len(*target) > 1 ||  len(*target) == 0{
+		plural = "s"
+	}
+	log.Printf("Found and persisted %d new eod item%s", len(*target), plural)
 }
 
-func buildTarget(source *[]domain.EndOfDaySourceItem, id string) *[]domain.EndOfDayItem {
+func buildTarget(source *[]domain.EndOfDaySourceItem, catalog *[]domain.EquityCatalogItem) *[]domain.EndOfDayItem {
 	result := make([]domain.EndOfDayItem, len(*source))
+
+	idMap := make(map[string]string, len(*catalog))
+	for _, v := range *catalog {
+		idMap[v.Symbol] = v.ID
+	}
 
 	for i, v := range *source {
 		item := domain.EndOfDayItem{
-			ID: id,
+			ID: idMap[v.Symbol],
 			Symbol: v.Symbol,
 			Open: v.Open,
 			High: v.High,

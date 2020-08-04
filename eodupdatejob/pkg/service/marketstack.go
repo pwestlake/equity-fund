@@ -80,14 +80,23 @@ func (s *MarketStackService) GetData(symbol string) (*[]domain.EndOfDaySourceIte
 }
 
 // GetDataFromDate ...
-// Get data for the given symbol from the given date
-func (s *MarketStackService) GetDataFromDate(symbol string, date time.Time) (*[]domain.EndOfDaySourceItem, error) {
+// Get data for the given symbols and from the given date
+func (s *MarketStackService) GetDataFromDate(symbols []string, date time.Time) (*[]domain.EndOfDaySourceItem, error) {
 	result := []domain.EndOfDaySourceItem{}
 	var err error
 
+	// Build a comma separted string of symbols
+	var symbolStr strings.Builder
+	for _, v := range symbols {
+		if symbolStr.Len() != 0 {
+			symbolStr.WriteString(",")
+		}
+		symbolStr.WriteString(v)
+	}
+
 	dateStr := fmt.Sprintf("%4d-%02d-%02d", date.Year(), date.Month(), date.Day())
 	url := fmt.Sprintf("%s/?access_key=%s&symbols=%s&offset=%d&limit=%d&date_from=%s", 
-		s.endpoint, s.apikey, symbol, 0, 1000, dateStr)
+		s.endpoint, s.apikey, symbolStr.String(), 0, 1000, dateStr)
 	
 	resp, err := http.Get(url)
 	if err != nil {
@@ -96,7 +105,7 @@ func (s *MarketStackService) GetDataFromDate(symbol string, date time.Time) (*[]
 
 	interim := domain.EndOfDayDataExtract{}
 	if interim.Pagination.Count != interim.Pagination.Total {
-		return nil, fmt.Errorf("More data than expected. Use backfill for %s", symbol)
+		return nil, fmt.Errorf("More data than expected. Use backfill")
 	}
 
 	buffer := strings.Builder{}
