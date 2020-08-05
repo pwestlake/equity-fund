@@ -29,7 +29,7 @@
                             Value is required.
                         </mat-error>
                         <mat-error *ngIf="equityForm.controls.symbol.errors.pattern">
-                            Equity symbol pattern required: *.XLON
+                            Equity symbol pattern required: *.XLON or *.L
                         </mat-error>
                     </mat-error>
                 </mat-form-field>
@@ -55,7 +55,7 @@
                             Value is required.
                         </mat-error>
                         <mat-error *ngIf="equityForm.controls.lseissuername.errors.maxlength">
-                            Name should be less than 40 characters
+                            Name should be less than 50 characters
                         </mat-error>
                     </mat-error>
                 </mat-form-field>
@@ -84,6 +84,14 @@
                             Pattern should be similar to: abcdefgh-1234-1234-1234-abcdefghijkl
                         </mat-error>
                     </mat-error>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Data Source</mat-label>
+                    <mat-select formControlName="datasource">
+                        <mat-option value="marketstack">marketstack</mat-option>
+                        <mat-option value="yahoo">yahoo! finance</mat-option>
+                    </mat-select>
                 </mat-form-field>
 
                 <div fxFlex="1 0 auto" style="width: 100%" fxLayoutAlign="end end">

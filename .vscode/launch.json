@@ -14,13 +14,13 @@
             "args": []
         },
         {
-            "name": "Launch",
+            "name": "Launch - backfill",
             "type": "go",
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/eodupdatejob/cmd/main.go",
             "env": {},
-            "args": ["-type",  "backfill", "-symbol", "BKG.XLON"]
+            "args": ["-type",  "backfill", "-symbol", "NEX.XLON"]
         },
         {
             "name": "Launch - uicontroller",

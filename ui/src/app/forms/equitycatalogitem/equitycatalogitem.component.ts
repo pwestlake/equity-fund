@@ -20,11 +20,12 @@ export class EquitycatalogitemComponent implements OnInit {
 
   ngOnInit(): void {
     this.equityForm = this.formBuilder.group({
-      symbol: new FormControl('', [Validators.required, Validators.pattern("^[A-Z]*\.XLON$")]),
-      lsetidm: new FormControl('', [Validators.required, Validators.pattern("^[A-Z]*$")]),
-      lseissuername: new FormControl('', [Validators.required, Validators.maxLength(40)]),
+      symbol: new FormControl('', [Validators.required, Validators.pattern("^[A-Z\.]*\.[XLON|L]$")]),
+      lsetidm: new FormControl('', [Validators.required, Validators.pattern("^[A-Z\.]*$")]),
+      lseissuername: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       lsetabid: new FormControl('771b9c49-382e-4e74-bd94-e96af5c94285', [Validators.required, Validators.pattern("^[a-f0-9]{8}?-[a-f0-9]{4}?-[a-f0-9]{4}?-[a-f0-9]{4}?-[a-f0-9]{12}?$")]),
       lsecomponentid: new FormControl('eb11eb09-4797-469c-a6ca-a258d2a53d60', [Validators.required, Validators.pattern("^[a-f0-9]{8}?-[a-f0-9]{4}?-[a-f0-9]{4}?-[a-f0-9]{4}?-[a-f0-9]{12}?$")]),
+      datasource: new FormControl('marketstack', [Validators.required])
     })
   }
 
@@ -36,6 +37,7 @@ export class EquitycatalogitemComponent implements OnInit {
       lseissuername: this.equityForm.value.lseissuername,
       lsetabid: this.equityForm.value.lsetabid,
       lsecomponentid: this.equityForm.value.lsecomponentid,
+      datasource: this.equityForm.value.datasource,
       datecreated: undefined,
       lastmodified: undefined
     };

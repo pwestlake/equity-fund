@@ -29,6 +29,7 @@ export class EquitycatalogComponent implements OnInit {
       lseissuername: "asda",
       lsetabid: "asdad",
       lsecomponentid: "string",
+      datasource: "string",
       datecreated: undefined,
       lastmodified: undefined
     }

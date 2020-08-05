@@ -17,8 +17,9 @@
 
             <div fxLayout="row" fxLayoutAlign="space-around center" class="table-header-row">
                 <div class="table-header-cell" fxFlex>ID</div>
-                <div class="table-header-cell" fxFlex> Symbol</div>
-                <div class="table-header-cell" fxFlex> Issuer Name</div>
+                <div class="table-header-cell" fxFlex>Symbol</div>
+                <div class="table-header-cell" fxFlex>Issuer Name</div>
+                <div class="table-header-cell" fxFlex>Datasource</div>
             </div>
         
             <cdk-virtual-scroll-viewport itemSize="48" minBufferPx="640" maxBufferPx="800" class="table-container table-body">
@@ -28,6 +29,7 @@
                     <div class="table-cell" fxFlex>{{ item.id }}</div>
                     <div class="table-cell" fxFlex>{{ item.symbol }}</div>
                     <div class="table-cell" fxFlex>{{ item.lseissuername }}</div>
+                    <div class="table-cell" fxFlex>{{ item.datasource }}</div>
                 </div>
     
             </cdk-virtual-scroll-viewport>

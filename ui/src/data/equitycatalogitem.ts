@@ -5,6 +5,7 @@ export interface EquityCatalogItem {
     lseissuername: string;
     lsetabid: string;
     lsecomponentid: string;
+    datasource: string,
     datecreated: Date;
     lastmodified: Date;
 }
