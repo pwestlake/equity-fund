@@ -116,6 +116,44 @@ func (s *EquityCatalogItemDAO) GetEquityCatalogItems() (*[]domain.EquityCatalogI
 	return &equityCatalogItems, err
 }
 
+// GetEquityCatalogItemsByDatasource ...
+// DAO method to return an array of all EquityCatalogItems with the given datasource
+func (s *EquityCatalogItemDAO) GetEquityCatalogItemsByDatasource(datasource string) (*[]domain.EquityCatalogItem, error) {
+	var equityCatalogItems []domain.EquityCatalogItem
+	dbSession := session.Must(session.NewSession())
+	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
+
+	filter := expression.Name("datasource").Equal(expression.Value(datasource))
+	expr, err := expression.NewBuilder().WithFilter(filter).Build()
+	if err != nil {
+		return nil, err
+	}
+	params := &dynamodb.ScanInput{
+		TableName: aws.String("EquityCatalog"),
+		ExpressionAttributeNames:  expr.Names(),
+		ExpressionAttributeValues: expr.Values(),
+		FilterExpression: expr.Filter()}
+
+	result, err := client.Scan(params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	equityCatalogItems = make([]domain.EquityCatalogItem, len(result.Items))
+	for i, item := range result.Items {
+		equityCatalogItem := domain.EquityCatalogItem{}
+		err = dynamodbattribute.UnmarshalMap(item, &equityCatalogItem)
+		if err != nil {
+			break;
+		} else {
+			equityCatalogItems[i] = equityCatalogItem
+		}
+	}
+	
+	return &equityCatalogItems, err
+}
+
 // GetEquityCatalogItemsBySymbol ...
 // DAO method to retrieve EquityCatalogItems by symbol
 func (s *EquityCatalogItemDAO) GetEquityCatalogItemsBySymbol(symbol string) (*[]domain.EquityCatalogItem, error) {

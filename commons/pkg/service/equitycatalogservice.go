@@ -35,6 +35,12 @@ func (s *EquityCatalogService) GetAllEquityCatalogItems() (*[]domain.EquityCatal
 	return s.equityCatalogItemDao.GetEquityCatalogItems()
 }
 
+// GetEquityCatalogItemsByDatasource ...
+// Service method to return an array of user ID's
+func (s *EquityCatalogService) GetEquityCatalogItemsByDatasource(datasource string) (*[]domain.EquityCatalogItem, error) {
+	return s.equityCatalogItemDao.GetEquityCatalogItemsByDatasource(datasource)
+}
+
 // PutEquityCatalogItem ...
 // Service method to persist a new user in the database
 func (s *EquityCatalogService) PutEquityCatalogItem(equityCatalogItem *domain.EquityCatalogItem) error {
