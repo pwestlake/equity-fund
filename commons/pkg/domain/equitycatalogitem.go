@@ -13,6 +13,7 @@ type EquityCatalogItem struct {
 	LSEissuername  string    `json:"lseissuername"`
 	LSEtabID       string    `json:"lsetabid"`
 	LSEcomponentID string    `json:"lsecomponentid"`
+	Datasource	   string	 `json:"datasource"`
 	DateCreated    time.Time `json:"datecreated"`
 	LastModified   time.Time `json:"lastmodified"`
 }
