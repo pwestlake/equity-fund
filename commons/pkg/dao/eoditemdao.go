@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"errors"
 	"time"
 	"github.com/pwestlake/aemo/userservice/pkg/config"
 	"github.com/pwestlake/equity-fund/commons/pkg/domain"
@@ -112,6 +113,10 @@ func (s *EndOfDayItemDAO) GetLatestItem(id string) (*domain.EndOfDayItem, error)
 	resp, err := client.Query(&queryInput)
 	if err != nil {
 		return &domain.EndOfDayItem{}, err
+	}
+
+	if *resp.Count == 0 {
+		return nil, errors.New("Item not found")
 	}
 
 	err = dynamodbattribute.UnmarshalMap(resp.Items[0],  &endOfDayItem)
