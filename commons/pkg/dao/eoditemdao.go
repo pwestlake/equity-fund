@@ -99,7 +99,7 @@ func (s *EndOfDayItemDAO) GetAllEndOfDayItemsByDate(date time.Time) (*[]domain.E
 	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
 
 	expressionAttributeValues := map[string]*dynamodb.AttributeValue {
-		":date": &dynamodb.AttributeValue{S: aws.String(date.String())},
+		":date": &dynamodb.AttributeValue{S: aws.String(date.Format("2006-01-02T15:04:05Z"))},
 	}
 
 
