@@ -50,7 +50,7 @@ func (s *BackFillJob) Run(symbol string) {
 		return
 	}
 
-	target := buildTarget(source, catalogItems)
+	target := buildTarget(source, catalogItems, nil)
 
 	err = s.endOfDayService.PutEndOfDayItems(target)
 	if err != nil {
@@ -86,6 +86,7 @@ func (s *BackFillJob) updateWithLatestFromMarketstack() {
 		return
 	}
 
+
 	fromDate := eodItem.Date.AddDate(0, 0, 1)
 	if fromDate.After(today()) || fromDate.Equal(today()) {
 		log.Printf("All marketstack data is up to date.")
@@ -98,6 +99,12 @@ func (s *BackFillJob) updateWithLatestFromMarketstack() {
 		symbols[i] = v.Symbol
 	}
 
+	current, err := s.endOfDayService.GetAllEndOfDayItemsByDate(eodItem.Date)
+	if err != nil {
+		log.Printf("Failed to retrieve current data: %s", err.Error())
+		return
+	}
+	
 	log.Printf("Updating %d items from %s", len(*catalogItems), fromDate.String())
 	source, err := s.dataService.GetDataFromDate(symbols, fromDate)
 
@@ -106,7 +113,7 @@ func (s *BackFillJob) updateWithLatestFromMarketstack() {
 		return
 	}
 
-	target := buildTarget(source, catalogItems)
+	target := buildTarget(source, catalogItems, current)
 
 	err = s.endOfDayService.PutEndOfDayItems(target)
 	if err != nil {
@@ -141,6 +148,12 @@ func (s *BackFillJob) updateWithLatestFromYahoo() {
 		return
 	}
 
+	current, err := s.endOfDayService.GetAllEndOfDayItemsByDate(eodItem.Date)
+	if err != nil {
+		log.Printf("Failed to retrieve current data: %s", err.Error())
+		return
+	}
+
 	for _, v := range *catalogItems {
 		source, err := s.yahooService.GetDataFromDate(v.Symbol, fromDate)
 		if err != nil {
@@ -148,7 +161,7 @@ func (s *BackFillJob) updateWithLatestFromYahoo() {
 			return
 		}
 		
-		target := buildTarget(source, catalogItems)
+		target := buildTarget(source, catalogItems, current)
 
 		err = s.endOfDayService.PutEndOfDayItems(target)
 		if err != nil {
@@ -163,7 +176,10 @@ func (s *BackFillJob) updateWithLatestFromYahoo() {
 	}
 	
 }
-func buildTarget(source *[]domain.EndOfDaySourceItem, catalog *[]domain.EquityCatalogItem) *[]domain.EndOfDayItem {
+
+func buildTarget(source *[]domain.EndOfDaySourceItem, 
+	catalog *[]domain.EquityCatalogItem,
+	current *[]domain.EndOfDayItem) *[]domain.EndOfDayItem {
 	result := make([]domain.EndOfDayItem, len(*source))
 
 	idMap := make(map[string]string, len(*catalog))
@@ -172,6 +188,7 @@ func buildTarget(source *[]domain.EndOfDaySourceItem, catalog *[]domain.EquityCa
 	}
 
 	for i, v := range *source {
+		previous := previousEndOfDayItem(v.Date.Time, v.Symbol, current)
 		item := domain.EndOfDayItem{
 			ID: idMap[v.Symbol],
 			Symbol: v.Symbol,
@@ -179,6 +196,7 @@ func buildTarget(source *[]domain.EndOfDaySourceItem, catalog *[]domain.EquityCa
 			High: v.High,
 			Low: v.Low,
 			Close: v.Close,
+			CloseChg: v.Close - previous.Close,
 			Volume: v.Volume,
 			AdjHigh: v.AdjHigh,
 			AdjLow: v.AdjLow,
@@ -200,4 +218,23 @@ func today() time.Time {
 	today := time.Now()
 	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, utc)
 	return today
+}
+
+func previousEndOfDayItem(date time.Time, symbol string, current *[]domain.EndOfDayItem) *domain.EndOfDayItem {
+	eodItem := domain.EndOfDayItem{
+		Close: 0.0,
+	}
+
+	previousDate := date.AddDate(0, 0, -1)
+
+	if current != nil {
+		for _, v := range *current {
+			if v.Date.Equal(previousDate) && v.Symbol == symbol {
+				eodItem = v
+				break
+			}
+		}
+	}
+
+	return &eodItem
 }
