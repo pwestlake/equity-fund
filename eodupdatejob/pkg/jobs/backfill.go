@@ -1,6 +1,7 @@
 package jobs
 
 import (
+	"time"
 	"log"
 	"github.com/pwestlake/equity-fund/eodupdatejob/pkg/service"
 	commons "github.com/pwestlake/equity-fund/commons/pkg/service"
@@ -11,6 +12,7 @@ import (
 // Component job the will perform a data back-fill
 type BackFillJob struct {
 	dataService service.MarketStackService
+	yahooService service.YahooService
 	equityCatalogService commons.EquityCatalogService
 	endOfDayService commons.EndOfDayService
 }
@@ -18,10 +20,12 @@ type BackFillJob struct {
 // NewBackFillJob ...
 // Create function for a BackFillJob component
 func NewBackFillJob(dataService service.MarketStackService, 
+	yahooService service.YahooService,
 	equityCatalogService commons.EquityCatalogService,
 	endOfDayService commons.EndOfDayService) BackFillJob {
 	return BackFillJob{
-		dataService: dataService, 
+		dataService: dataService,
+		yahooService: yahooService,
 		equityCatalogService: equityCatalogService,
 		endOfDayService: endOfDayService}
 }
@@ -63,7 +67,12 @@ func (s *BackFillJob) Run(symbol string) {
 // UpdateWithLatest ...
 // Update all catalog items with latest data
 func (s *BackFillJob) UpdateWithLatest() {
-	catalogItems, err := s.equityCatalogService.GetAllEquityCatalogItems()
+	s.updateWithLatestFromMarketstack()
+	s.updateWithLatestFromYahoo()
+}
+
+func (s *BackFillJob) updateWithLatestFromMarketstack() {
+	catalogItems, err := s.equityCatalogService.GetEquityCatalogItemsByDatasource("marketstack")
 	if err != nil {
 		log.Printf("Failed to get catalog items: %s", err.Error())
 		return
@@ -78,6 +87,10 @@ func (s *BackFillJob) UpdateWithLatest() {
 	}
 
 	fromDate := eodItem.Date.AddDate(0, 0, 1)
+	if fromDate.After(today()) || fromDate.Equal(today()) {
+		log.Printf("All marketstack data is up to date.")
+		return
+	}
 
 	// Build an array of symbols
 	symbols := make([]string, len(*catalogItems))
@@ -107,6 +120,49 @@ func (s *BackFillJob) UpdateWithLatest() {
 	log.Printf("Found and persisted %d new eod item%s", len(*target), plural)
 }
 
+func (s *BackFillJob) updateWithLatestFromYahoo() {
+	catalogItems, err := s.equityCatalogService.GetEquityCatalogItemsByDatasource("yahoo")
+	if err != nil {
+		log.Printf("Failed to get catalog items: %s", err.Error())
+		return
+	}
+
+	// Find the date of the last update and derive the 'from' date
+	// Assume that all items were updated at the same time
+	eodItem, err := s.endOfDayService.GetLatestItem((*catalogItems)[0].ID)
+	if err != nil {
+		log.Printf("Failed to get latest item for %s, %s. Aborting", (*catalogItems)[0].ID, err.Error())
+		return
+	}
+
+	fromDate := eodItem.Date.AddDate(0, 0, 1)
+	if fromDate.After(today()) || fromDate.Equal(today()) {
+		log.Printf("All yahoo data is up to date.")
+		return
+	}
+
+	for _, v := range *catalogItems {
+		source, err := s.yahooService.GetDataFromDate(v.Symbol, fromDate)
+		if err != nil {
+			log.Printf("Failed to source %s. Aborting: %s", v.Symbol, err.Error())
+			return
+		}
+		
+		target := buildTarget(source, catalogItems)
+
+		err = s.endOfDayService.PutEndOfDayItems(target)
+		if err != nil {
+			log.Printf("Failed to persist end of day data")
+		}
+
+		plural := ""
+		if len(*target) > 1 ||  len(*target) == 0{
+			plural = "s"
+		}
+		log.Printf("Found and persisted %d new eod item%s for %s", len(*target), plural, v.Symbol)
+	}
+	
+}
 func buildTarget(source *[]domain.EndOfDaySourceItem, catalog *[]domain.EquityCatalogItem) *[]domain.EndOfDayItem {
 	result := make([]domain.EndOfDayItem, len(*source))
 
@@ -137,4 +193,11 @@ func buildTarget(source *[]domain.EndOfDaySourceItem, catalog *[]domain.EquityCa
 	}
 
 	return &result
+}
+
+func today() time.Time {
+	utc, _ := time.LoadLocation("UTC") 
+	today := time.Now()
+	today = time.Date(today.Year(), today.Month(), today.Day(), 0, 0, 0, 0, utc)
+	return today
 }

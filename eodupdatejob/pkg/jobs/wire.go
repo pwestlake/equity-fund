@@ -10,7 +10,7 @@ import (
 )
 
 func InitializeBackFillJob() BackFillJob {
-	wire.Build(NewBackFillJob, service.NewMarketStackService, 
+	wire.Build(NewBackFillJob, service.NewMarketStackService, service.NewYahooService,
 		commons.NewEquityCatalogService, dao.NewEquityCatalogItemDAO,
 		commons.NewEndOfDayService, dao.NewEndOfDayItemDAO)
 	return BackFillJob{}

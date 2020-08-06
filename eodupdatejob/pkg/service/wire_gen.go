@@ -11,3 +11,8 @@ func InitializeMarketStackService() MarketStackService {
 	marketStackService := NewMarketStackService()
 	return marketStackService
 }
+
+func InitializeYahooService() YahooService {
+	yahooService := NewYahooService()
+	return yahooService
+}
