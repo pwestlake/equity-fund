@@ -42,3 +42,9 @@ func (s *EndOfDayService) GetAllEndOfDayItemsByDate(date time.Time) (*[]domain.E
 func (s *EndOfDayService) GetLatestItem(id string) (*domain.EndOfDayItem, error) {
 	return s.endOfDayItemDaoDao.GetLatestItem(id)
 }
+
+// GetLatest ...
+// Service method to retrieve the latest eod item for a given id
+func (s *EndOfDayService) GetLatest() (*domain.EndOfDayItem, error) {
+	return s.endOfDayItemDaoDao.GetLatest()
+}
