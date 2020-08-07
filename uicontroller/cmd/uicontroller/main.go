@@ -59,6 +59,14 @@ func main() {
 	r.Handle("/equity-fund/uicontroller/timeseries/close/{id}", 
 		jwtMiddleware.Handler(http.HandlerFunc(endOfDayRoutes.GetClosePriceTimeSeries))).Methods(http.MethodGet)
 
+	// GET /latest-eod/
+	r.Handle("/equity-fund/uicontroller/latest-eod", 
+	jwtMiddleware.Handler(http.HandlerFunc(endOfDayRoutes.GetLatestEndOfDayItems))).Methods(http.MethodGet)
+
+	// GET /latest-eod-item/
+	r.Handle("/equity-fund/uicontroller/latest-eod-item", 
+	jwtMiddleware.Handler(http.HandlerFunc(endOfDayRoutes.GetLatestEndOfDayItem))).Methods(http.MethodGet)
+
 	log.Println("Listening on port: ", port)
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }

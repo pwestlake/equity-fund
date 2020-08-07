@@ -16,6 +16,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -49,6 +51,8 @@ import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycata
     MatProgressBarModule,
     MatSelectModule,
     MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
     MatTabsModule,
     MatToolbarModule,
     ReactiveFormsModule,

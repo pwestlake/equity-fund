@@ -1,7 +1,27 @@
 app-summary {
-    .chart {
+    .view {
+        margin-top: 10px;
+        margin-left: 10px;
+    }
+
+    .card {
         height: 300px;
-        width: 500px;
-        margin: 10px;
+        margin-bottom: 10px;
+    }
+
+    .card:last-child {
+        margin-right:10px;
+    }
+
+    .summary-table {
+        margin: 0px 10px 10px 0px;
+    }
+
+    .up {
+        color: greenyellow;
+    }
+
+    .down {
+        color: red;
     }
 }

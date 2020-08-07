@@ -67,3 +67,58 @@ func (s *EndOfDayRoutes) GetClosePriceTimeSeries(w http.ResponseWriter, r *http.
 
 	s.Route.Handle(w, r, getClosePriceTimeSeries)
 }
+
+// GetLatestEndOfDayItems ...
+// Handler method for the route /latest-eod/
+func (s *EndOfDayRoutes) GetLatestEndOfDayItems(w http.ResponseWriter, r *http.Request) {
+	getLatestEndOfDayItems := func(w http.ResponseWriter, r *http.Request) commons.HTTPResponse {
+		latest, err := s.endOfDayService.GetLatestItem("a946a667-dd1f-46e0-81d9-c4fb7d52de9c")
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusNotFound,
+				Body: fmt.Sprintf("Failed to get End Of Day item, error: %s", err.Error())}
+		}
+
+		items, err := s.endOfDayService.GetAllEndOfDayItemsByDate(latest.Date)
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusNotFound,
+				Body: fmt.Sprintf("Failed to get End Of Day items, error: %s", err.Error())}
+		}
+
+		json, err := json.Marshal(items)
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusInternalServerError,
+				Body: fmt.Sprintf("Unable to marshal data for End Of Day, error: %s", err.Error())}
+		}
+
+		return &commons.HTTPSuccessResponse{Body: json}
+	}
+
+	s.Route.Handle(w, r, getLatestEndOfDayItems)
+}
+
+// GetLatestEndOfDayItem ...
+// Handler method for the route /latest-eod-item/
+func (s *EndOfDayRoutes) GetLatestEndOfDayItem(w http.ResponseWriter, r *http.Request) {
+	getLatestEndOfDayItems := func(w http.ResponseWriter, r *http.Request) commons.HTTPResponse {
+		latest, err := s.endOfDayService.GetLatestItem("a946a667-dd1f-46e0-81d9-c4fb7d52de9c")
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusNotFound,
+				Body: fmt.Sprintf("Failed to get End Of Day item, error: %s", err.Error())}
+		}
+
+		json, err := json.Marshal(latest)
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusInternalServerError,
+				Body: fmt.Sprintf("Unable to marshal data for End Of Day, error: %s", err.Error())}
+		}
+
+		return &commons.HTTPSuccessResponse{Body: json}
+	}
+
+	s.Route.Handle(w, r, getLatestEndOfDayItems)
+}

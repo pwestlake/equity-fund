@@ -1,11 +1,50 @@
-<div fxFlex="1 1 auto" fxLayout="row wrap">
-    <mat-card *ngFor="let item of catalog | async" class="chart" fxLayout="column">
+<div fxFlex="1 1 auto" class="view">
+    <div fxFlex="67" fxLayout="row wrap" fxLayoutGap="10px">
+        <mat-card *ngFor="let item of catalog | async" fxLayout="column" class="card" fxFlex="calc(50% - 10px)">
+            <mat-card-header>
+                <mat-card-title>{{item.symbol}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content fxFlex="1 0 auto">
+                <app-date-value fxFlex="1 0 auto" [data]='closePriceChart(item.id) |async'></app-date-value>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <mat-card fxFlex="33" fxLayout="column" class="summary-table">
         <mat-card-header>
-            <mat-card-title>{{item.symbol}}</mat-card-title>
+            <mat-card-title>{{(latest | async).date | date:'mediumDate'}}</mat-card-title>
         </mat-card-header>
         <mat-card-content fxFlex="1 0 auto">
-            <app-date-value fxFlex="1 0 auto" 
-                [data]='closePriceChart(item.id) |async'></app-date-value>
+            <table mat-table [dataSource] = "tableData" matSort style="width: 100%">
+                <ng-container matColumnDef="symbol">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Symbol</th>
+                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+                </ng-container>
+                <ng-container matColumnDef="open">
+                    <th mat-header-cell *matHeaderCellDef>Open</th>
+                    <td mat-cell *matCellDef="let element"> {{element.open | number:'1.2-2'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="high">
+                    <th mat-header-cell *matHeaderCellDef>High</th>
+                    <td mat-cell *matCellDef="let element"> {{element.high | number:'1.2-2'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="low">
+                    <th mat-header-cell *matHeaderCellDef>Low</th>
+                    <td mat-cell *matCellDef="let element"> {{element.low  | number:'1.2-2'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="close">
+                    <th mat-header-cell *matHeaderCellDef>Close</th>
+                    <td mat-cell *matCellDef="let element"> {{element.close | number:'1.2-2'}} </td>
+                </ng-container>
+                <ng-container matColumnDef="close_chg">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Change</th>
+                    <td mat-cell *matCellDef="let element" 
+                    [ngClass]="{'up': element.close_chg > 0, 'down': element.close_chg < 0}"> {{element.close_chg | number:'1.2-2'}} </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
         </mat-card-content>
     </mat-card>
+
 </div>
