@@ -153,30 +153,3 @@ func (s *EndOfDayItemDAO) GetLatestItem(id string) (*domain.EndOfDayItem, error)
 	
 	return &endOfDayItem, err
 }
-
-// GetLatest ...
-// Retrieve the latest item fof all
-func (s *EndOfDayItemDAO) GetLatest() (*domain.EndOfDayItem, error){
-	var endOfDayItem = domain.EndOfDayItem{}
-	dbSession := session.Must(session.NewSession())
-	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
-
-	queryInput := dynamodb.QueryInput {
-		TableName: aws.String("EndOfDay"),
-		Limit: aws.Int64(1),
-		ScanIndexForward: aws.Bool(false),
-	}
-
-	resp, err := client.Query(&queryInput)
-	if err != nil {
-		return &domain.EndOfDayItem{}, err
-	}
-
-	if *resp.Count == 0 {
-		return nil, errors.New("Item not found")
-	}
-
-	err = dynamodbattribute.UnmarshalMap(resp.Items[0],  &endOfDayItem)
-	
-	return &endOfDayItem, err
-}
