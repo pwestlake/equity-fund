@@ -16,3 +16,8 @@ func InitializeEndOfDayService() EndOfDayService {
 	wire.Build(NewEndOfDayService, dao.NewEndOfDayItemDAO)
 	return EndOfDayService{}
 }
+
+func InitializeNewsService() NewsService {
+	wire.Build(NewNewsService, dao.NewNewsItemDAO)
+	return NewsService{}
+}

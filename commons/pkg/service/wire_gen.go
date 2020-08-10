@@ -22,3 +22,9 @@ func InitializeEndOfDayService() EndOfDayService {
 	endOfDayService := NewEndOfDayService(endOfDayItemDAO)
 	return endOfDayService
 }
+
+func InitializeNewsService() NewsService {
+	newsItemDAO := dao.NewNewsItemDAO()
+	newsService := NewNewsService(newsItemDAO)
+	return newsService
+}

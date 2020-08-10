@@ -181,15 +181,15 @@ func (s *EquityCatalogItemDAO) GetEquityCatalogItemsBySymbol(symbol string) (*[]
 	}
 
 	equityCatalogItems = make([]domain.EquityCatalogItem, len(result.Items))
-		for i, item := range result.Items {
-			equityCatalogItem := domain.EquityCatalogItem{}
-			err = dynamodbattribute.UnmarshalMap(item, &equityCatalogItem)
-			if err != nil {
-				break;
-			} else {
-				equityCatalogItems[i] = equityCatalogItem
-			}
+	for i, item := range result.Items {
+		equityCatalogItem := domain.EquityCatalogItem{}
+		err = dynamodbattribute.UnmarshalMap(item, &equityCatalogItem)
+		if err != nil {
+			break;
+		} else {
+			equityCatalogItems[i] = equityCatalogItem
 		}
+	}
 
 	return &equityCatalogItems, err
 }
