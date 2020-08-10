@@ -104,25 +104,23 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 	dbSession := session.Must(session.NewSession())
 	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
 
-	exprBuilder := expression.NewBuilder()
-	if id != nil {
-		filter := expression.Name("id").Equal(expression.Value(*id))
-		exprBuilder = exprBuilder.WithFilter(filter)
-	}
-
-	expr, err := exprBuilder.Build()
-	if err != nil {
-		return nil, err
-	}
-
 	params := &dynamodb.ScanInput{
 		TableName: aws.String("NewsItems"),
-		ExpressionAttributeNames:  expr.Names(),
-		ExpressionAttributeValues: expr.Values(),
-		FilterExpression: expr.Filter(),
 		Limit: aws.Int64(int64(count)),
 	}
 
+	if id != nil {
+		filter := expression.Name("id").Equal(expression.Value(*id))
+		expr, err := expression.NewBuilder().WithFilter(filter).Build()
+		if err != nil {
+			return nil, err
+		}
+
+		params.ExpressionAttributeNames = expr.Names()
+		params.ExpressionAttributeValues = expr.Values()
+		params.FilterExpression = expr.Filter()
+	}
+	
 	if (offset != nil) {
 		exclusiveStartKeyMap := map[string]*dynamodb.AttributeValue {
 			":id": &dynamodb.AttributeValue{S: aws.String(offset.ID)},
