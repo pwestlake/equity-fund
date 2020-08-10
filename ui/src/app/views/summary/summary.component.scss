@@ -14,7 +14,7 @@ app-summary {
     }
 
     .summary-table {
-        margin: 0px 10px 10px 0px;
+        margin: 0px 0px 10px 0px;
     }
 
     .up {
@@ -23,5 +23,10 @@ app-summary {
 
     .down {
         color: red;
+    }
+
+    .settings-container {
+        width: 230px;
+        margin: 10px 10px 10px 10px;
     }
 }
