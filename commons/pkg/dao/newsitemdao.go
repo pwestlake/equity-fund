@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"github.com/google/uuid"
 	"github.com/aws/aws-sdk-go/service/dynamodb/expression"
 	"errors"
 	"github.com/aws/aws-sdk-go/aws"
@@ -46,6 +47,7 @@ func (s *NewsItemDAO) PutNewsItems(items *[]domain.NewsItem) error{
 
 	var err error
 	for _, v := range *items {
+		v.ID = uuid.New().String()
 		av, err := dynamodbattribute.MarshalMap(v)
 		if err != nil {
 			log.Printf("Error marshalling NewsItem type")
