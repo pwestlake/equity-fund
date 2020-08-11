@@ -72,15 +72,16 @@ func (s *NewsItemDAO) GetLatestItem(id string) (*domain.NewsItem, error){
 	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
 
 	expressionAttributeValues := map[string]*dynamodb.AttributeValue {
-		":id": &dynamodb.AttributeValue{S: aws.String(id)},
+		":catalogref": &dynamodb.AttributeValue{S: aws.String(id)},
 	}
 
 	queryInput := dynamodb.QueryInput {
 		TableName: aws.String("NewsItems"),
+		IndexName: aws.String("catalogref-datetime-index"),
 		ExpressionAttributeValues: expressionAttributeValues,
 		Limit: aws.Int64(1),
 		ScanIndexForward: aws.Bool(false),
-		KeyConditionExpression: aws.String("id = :id"),
+		KeyConditionExpression: aws.String("catalogref = :catalogref"),
 	}
 
 	resp, err := client.Query(&queryInput)
@@ -138,7 +139,7 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 	params.ExpressionAttributeNames = expr.Names()
 	params.ExpressionAttributeValues = expr.Values()
 	params.ProjectionExpression = expr.Projection()
-	
+
 	if (offset != nil) {
 		exclusiveStartKeyMap := map[string]*dynamodb.AttributeValue {
 			":id": &dynamodb.AttributeValue{S: aws.String(offset.ID)},
