@@ -104,22 +104,40 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 	dbSession := session.Must(session.NewSession())
 	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
 
+	proj := expression.NamesList(
+		expression.Name("id"), 
+		expression.Name("datetime"), 
+		expression.Name("catalogref"),
+		expression.Name("companycode"),
+		expression.Name("companyname"),
+		expression.Name("sentiment"),
+		expression.Name("title"))
+
 	params := &dynamodb.ScanInput{
 		TableName: aws.String("NewsItems"),
 		Limit: aws.Int64(int64(count)),
 	}
 
+	var expr expression.Expression
+	var err error
 	if id != nil {
 		filter := expression.Name("id").Equal(expression.Value(*id))
-		expr, err := expression.NewBuilder().WithFilter(filter).Build()
+		expr, err = expression.NewBuilder().WithFilter(filter).WithProjection(proj).Build()
 		if err != nil {
 			return nil, err
 		}
 
-		params.ExpressionAttributeNames = expr.Names()
-		params.ExpressionAttributeValues = expr.Values()
 		params.FilterExpression = expr.Filter()
+	} else {
+		expr, err = expression.NewBuilder().WithProjection(proj).Build()
+		if err != nil {
+			return nil, err
+		}
 	}
+	
+	params.ExpressionAttributeNames = expr.Names()
+	params.ExpressionAttributeValues = expr.Values()
+	params.ProjectionExpression = expr.Projection()
 	
 	if (offset != nil) {
 		exclusiveStartKeyMap := map[string]*dynamodb.AttributeValue {
