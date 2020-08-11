@@ -16,10 +16,13 @@ import (
 func InitializeBackFillJob() BackFillJob {
 	marketStackService := service.NewMarketStackService()
 	yahooService := service.NewYahooService()
+	lseService := service.NewLSEService()
 	equityCatalogItemDAO := dao.NewEquityCatalogItemDAO()
 	equityCatalogService := service2.NewEquityCatalogService(equityCatalogItemDAO)
 	endOfDayItemDAO := dao.NewEndOfDayItemDAO()
 	endOfDayService := service2.NewEndOfDayService(endOfDayItemDAO)
-	backFillJob := NewBackFillJob(marketStackService, yahooService, equityCatalogService, endOfDayService)
+	newsItemDAO := dao.NewNewsItemDAO()
+	newsService := service2.NewNewsService(newsItemDAO)
+	backFillJob := NewBackFillJob(marketStackService, yahooService, lseService, equityCatalogService, endOfDayService, newsService)
 	return backFillJob
 }

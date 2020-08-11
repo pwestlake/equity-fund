@@ -11,7 +11,9 @@ import (
 
 func InitializeBackFillJob() BackFillJob {
 	wire.Build(NewBackFillJob, service.NewMarketStackService, service.NewYahooService,
+		service.NewLSEService,
 		commons.NewEquityCatalogService, dao.NewEquityCatalogItemDAO,
-		commons.NewEndOfDayService, dao.NewEndOfDayItemDAO)
+		commons.NewEndOfDayService, dao.NewEndOfDayItemDAO,
+		commons.NewNewsService, dao.NewNewsItemDAO)
 	return BackFillJob{}
 }

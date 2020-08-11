@@ -16,3 +16,8 @@ func InitializeYahooService() YahooService {
 	yahooService := NewYahooService()
 	return yahooService
 }
+
+func InitializeLSEService() LSEService {
+	lseService := NewLSEService()
+	return lseService
+}

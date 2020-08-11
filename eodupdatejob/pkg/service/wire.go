@@ -15,3 +15,8 @@ func InitializeYahooService() YahooService {
 	wire.Build(NewYahooService)
 	return YahooService{}
 }
+
+func InitializeLSEService() LSEService {
+	wire.Build(NewLSEService)
+	return LSEService{}
+}

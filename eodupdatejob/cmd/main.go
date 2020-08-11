@@ -13,7 +13,7 @@ func main() {
 	configPtr := flag.String("server", "http://localhost:8888", "the url of the cloud config server")
 	profilePtr := flag.String("profile", "dev", "the configuration profile")
 	labelPtr := flag.String("label", "development", "the configuration label")
-	typePtr := flag.String("type", "latest", "the type of operation latest|backfill")
+	typePtr := flag.String("type", "latest", "the type of operation latest|backfill|news")
 	symbolPtr := flag.String("symbol", "", "the symbol to backfill")
 	flag.Parse()
 
@@ -26,6 +26,8 @@ func main() {
 		backfillJob.Run(*symbolPtr)
 	case "latest":
 		backfillJob.UpdateWithLatest()
+	case "news":
+		backfillJob.FetchLatestNews()
 	default:
 		log.Print("Nothing to do")
 	}

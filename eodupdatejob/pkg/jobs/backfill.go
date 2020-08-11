@@ -13,21 +13,27 @@ import (
 type BackFillJob struct {
 	dataService service.MarketStackService
 	yahooService service.YahooService
+	lseService service.LSEService
 	equityCatalogService commons.EquityCatalogService
 	endOfDayService commons.EndOfDayService
+	newsService commons.NewsService
 }
 
 // NewBackFillJob ...
 // Create function for a BackFillJob component
 func NewBackFillJob(dataService service.MarketStackService, 
 	yahooService service.YahooService,
+	lseService service.LSEService,
 	equityCatalogService commons.EquityCatalogService,
-	endOfDayService commons.EndOfDayService) BackFillJob {
+	endOfDayService commons.EndOfDayService,
+	newsService commons.NewsService) BackFillJob {
 	return BackFillJob{
 		dataService: dataService,
 		yahooService: yahooService,
+		lseService: lseService,
 		equityCatalogService: equityCatalogService,
-		endOfDayService: endOfDayService}
+		endOfDayService: endOfDayService,
+		newsService: newsService}
 }
 
 // Run ...
@@ -69,6 +75,48 @@ func (s *BackFillJob) Run(symbol string) {
 func (s *BackFillJob) UpdateWithLatest() {
 	s.updateWithLatestFromMarketstack()
 	s.updateWithLatestFromYahoo()
+	s.FetchLatestNews()
+}
+
+// FetchLatestNews ...
+// Fetch the latest news for each of the catalog items
+func (s *BackFillJob) FetchLatestNews() {
+	catalogItems, err := s.equityCatalogService.GetAllEquityCatalogItems()
+	if err != nil {
+		log.Printf("Failed to get catalog items: %s", err.Error())
+		return
+	}
+
+	for _, v := range *catalogItems {
+		var date time.Time
+		item, err := s.newsService.GetLatestItem(v.ID)
+		if err != nil {
+			log.Printf("Failed to fetch latest news item for %s. %s", v.Symbol, err.Error())
+			
+			// Set a date to fetch all available news items
+			date = time.Now()
+			date = date.AddDate(-1, 0, 0)
+		} else {
+			date = item.DateTime
+		}
+		
+		newsItems, err := s.lseService.GetNewsFromDate(&v, date)
+		if err != nil {
+			log.Printf("Failed to fetch news for %s. %s", v.Symbol, err.Error())
+		}
+
+		plural := ""
+		if len(*newsItems) > 1 ||  len(*newsItems) == 0{
+			plural = "s"
+		}
+
+		log.Printf("Found %d news item%s for %s", len(*newsItems), plural, v.Symbol)
+
+		err = s.newsService.PutNewsItems(newsItems)
+		if (err != nil) {
+			log.Printf("Failed to persist news items for %s. %s", v.Symbol, err.Error())
+		}
+	}
 }
 
 func (s *BackFillJob) updateWithLatestFromMarketstack() {
@@ -225,7 +273,7 @@ func previousEndOfDayItem(date time.Time, symbol string, current *[]domain.EndOf
 		Close: 0.0,
 	}
 
-	previousDate := date.AddDate(0, 0, -1)
+	previousDate := (*current)[0].Date
 
 	if current != nil {
 		for _, v := range *current {

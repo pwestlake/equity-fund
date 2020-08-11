@@ -30,6 +30,15 @@
             "program": "${workspaceFolder}/uicontroller/cmd/uicontroller/main.go",
             "env": {},
             "args": []
+        },
+        {
+            "name": "Launch - fetch news",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/eodupdatejob/cmd/main.go",
+            "env": {},
+            "args": ["-type", "news"]
         }
     ]
 }
