@@ -102,7 +102,7 @@ func (s *NewsItemDAO) GetLatestItem(id string) (*domain.NewsItem, error){
 // Return count news items from the given offset with the given id. All items if the id is nil
 func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *string) (*[]domain.NewsItem, error) {
 	if id != nil {
-		return queryNewsItems(count, offset, id)
+		return s.queryNewsItems(count, offset, id)
 	}
 
 	var newsItems = []domain.NewsItem{}
@@ -203,6 +203,7 @@ func (s *NewsItemDAO) queryNewsItems(count int, offset *domain.NewsItem, id *str
 	params := &dynamodb.QueryInput{
 		TableName: aws.String("NewsItems"),
 		IndexName: aws.String("catalogref-datetime-index"),
+		ExpressionAttributeValues: expressionAttributeValues,
 		KeyConditionExpression: aws.String("catalogref = :catalogref"),
 		Limit: aws.Int64(int64(count)),
 		ProjectionExpression: expr.Projection(),
