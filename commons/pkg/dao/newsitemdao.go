@@ -122,7 +122,7 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 	var expr expression.Expression
 	var err error
 	if id != nil {
-		filter := expression.Name("id").Equal(expression.Value(*id))
+		filter := expression.Name("catalogref").Equal(expression.Value(*id))
 		expr, err = expression.NewBuilder().WithFilter(filter).WithProjection(proj).Build()
 		if err != nil {
 			return nil, err
