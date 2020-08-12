@@ -101,6 +101,10 @@ func (s *NewsItemDAO) GetLatestItem(id string) (*domain.NewsItem, error){
 // GetNewsItems ...
 // Return count news items from the given offset with the given id. All items if the id is nil
 func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *string) (*[]domain.NewsItem, error) {
+	if id != nil {
+		return queryNewsItems(count, offset, id)
+	}
+
 	var newsItems = []domain.NewsItem{}
 	dbSession := session.Must(session.NewSession())
 	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
@@ -151,6 +155,71 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 	complete := false
 	for !complete {
 		result, err := client.Scan(params)
+		if err != nil {
+			return nil, err
+		}
+
+		items := []domain.NewsItem{}
+		err = dynamodbattribute.UnmarshalListOfMaps(result.Items, &items)
+		if err != nil {
+			return nil, err
+		}
+
+		newsItems = append(newsItems, items...)
+		
+		if result.LastEvaluatedKey != nil {
+			params.ExclusiveStartKey = result.LastEvaluatedKey
+		} else {
+			complete = true
+		}
+	}
+
+	return &newsItems, nil
+}
+
+func (s *NewsItemDAO) queryNewsItems(count int, offset *domain.NewsItem, id *string) (*[]domain.NewsItem, error) {
+	var newsItems = []domain.NewsItem{}
+	dbSession := session.Must(session.NewSession())
+	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
+
+	proj := expression.NamesList(
+		expression.Name("id"), 
+		expression.Name("datetime"), 
+		expression.Name("catalogref"),
+		expression.Name("companycode"),
+		expression.Name("companyname"),
+		expression.Name("sentiment"),
+		expression.Name("title"))
+
+	expr, err := expression.NewBuilder().WithProjection(proj).Build()
+	if err != nil {
+		return nil, err
+	}
+
+	expressionAttributeValues := map[string]*dynamodb.AttributeValue {
+		":catalogref": &dynamodb.AttributeValue{S: id},
+	}
+
+	params := &dynamodb.QueryInput{
+		TableName: aws.String("NewsItems"),
+		IndexName: aws.String("catalogref-datetime-index"),
+		KeyConditionExpression: aws.String("catalogref = :catalogref"),
+		Limit: aws.Int64(int64(count)),
+		ProjectionExpression: expr.Projection(),
+	}
+
+	if (offset != nil) {
+		exclusiveStartKeyMap := map[string]*dynamodb.AttributeValue {
+			":id": &dynamodb.AttributeValue{S: aws.String(offset.ID)},
+			":catalogref": &dynamodb.AttributeValue{S: id},
+			":datetime": &dynamodb.AttributeValue{S: aws.String(offset.DateTime.Format("2006-01-02T15:04:05Z"))},
+		}
+		params.ExclusiveStartKey = exclusiveStartKeyMap
+	}
+
+	complete := false
+	for !complete {
+		result, err := client.Query(params)
 		if err != nil {
 			return nil, err
 		}
