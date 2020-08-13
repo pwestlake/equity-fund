@@ -35,6 +35,6 @@ func (s *NewsService) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 }
 
 // GetItem ...
-func (s *NewsService) GetItem(count int, offset *domain.NewsItem, id *string) (*domain.NewsItem, error) {
-	return s.newsItemDao.GetItem(*id)
+func (s *NewsService) GetItem(id string) (*domain.NewsItem, error) {
+	return s.newsItemDao.GetItem(id)
 }
