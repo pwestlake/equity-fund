@@ -1,4 +1,6 @@
-<mat-tab-group backgroundColor="primary" style="width:100vw;" dynamicHeight="true" paginationDisabled="false"
+<mat-tab-group #tabs backgroundColor="primary" style="width:100vw;" dynamicHeight="true" 
+    paginationDisabled="false"
+    (selectedTabChange)="selectedTabChanged(tabs.selectedIndex)" 
     fxFlex="1 1 auto">
 
     <!-- Summary charts-->
@@ -92,7 +94,52 @@
         </mat-drawer-container>
     </mat-tab>
 
+    <!-- News-->
     <mat-tab label="News">
+        <div class="tab-tools-container">
+            <div class="tab-tools-button-group" fxLayout="row" fxLayoutAlign="space-around center">
+                <!-- Search button-->
+                <button mat-icon-button mat-icon-no-color (click)="search.open()" matTooltip="Search">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </div>
+        </div>
 
+        <mat-drawer-container fxFlex="1 0 auto" class="chart-drawer-container">
+
+            <mat-drawer #search position="end" closed autoFocus="false" fxFlex="1 0 auto" mode="side">
+                <div class="settings-container">
+                    <h4>Search</h4>
+                    <app-equity-selector #equitySelector (equityChange)="equityChanged($event)"></app-equity-selector>
+
+                    <div fxLayout="row" fxLayoutAlign="end" style="padding-top: 32px">
+                        <button mat-flat-button color="primary" (click)="search.toggle()">Close</button>
+                    </div>
+                </div>
+            </mat-drawer>
+
+            <mat-drawer-content fxFlex="1 1 auto">
+                <div fxLayout="row" fxLayoutAlign="space-around center" class="table-header-row">
+                    <div class="table-header-cell" style="width: 120px">Date</div>
+                    <div class="table-header-cell" style="width: 90px">Ticker</div>
+                    <div class="table-header-cell" style="width: 250px">Company</div>
+                    <div class="table-header-cell" style="width: 90px">Sentiment</div>
+                    <div class="table-header-cell" fxFlex>Title</div>
+                </div>
+            
+                <cdk-virtual-scroll-viewport itemSize="48" minBufferPx="640" maxBufferPx="800" class="newstable-container table-body">
+                
+                    <div fxLayout="row" fxLayoutAlign="space-between center" class="table-row" 
+                        *cdkVirtualFor="let item of newsData">
+                        <div class="table-cell" style="width: 120px">{{ item.datetime | date:'mediumDate' }}</div>
+                        <div class="table-cell" style="width: 90px">{{ item.companycode }}</div>
+                        <div class="table-cell" style="width: 250px">{{ item.companyname }}</div>
+                        <div class="table-cell" style="width: 90px">{{ item.sentiment }}</div>
+                        <div class="table-cell" fxFlex>{{ item.title }}</div>
+                    </div>
+
+                </cdk-virtual-scroll-viewport>
+            </mat-drawer-content>
+        </mat-drawer-container>
     </mat-tab>
 </mat-tab-group>

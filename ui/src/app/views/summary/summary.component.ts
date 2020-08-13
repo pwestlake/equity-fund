@@ -8,6 +8,8 @@ import { DateValueModel } from 'src/data/date-value.model';
 import { EndOfDayItem } from 'src/data/eoditem';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
+import { NewsDataSource } from './newsdatasource';
+import { NewsService } from 'src/app/services/news.service';
 
 @Component({
   selector: 'app-summary',
@@ -21,13 +23,17 @@ export class SummaryComponent implements OnInit {
   displayedColumns: string[] = ['symbol', 'open', 'high', 'low', 'close', 'close_chg'];
   tableData: MatTableDataSource<EndOfDayItem>;
   latest: Observable<EndOfDayItem>;
+  newsData: NewsDataSource;
 
-  constructor(private equityCatalogService: EquitycatalogService, private endOfDayService: EodService) { }
+  constructor(private equityCatalogService: EquitycatalogService, 
+    private endOfDayService: EodService,
+    private newsService: NewsService) { }
 
   @ViewChild(MatSort, {static: true}) 
   sort: MatSort;
 
   ngOnInit(): void {
+    this.newsData = new NewsDataSource(this.newsService);
     this.latest = this.endOfDayService.getLatestEndOfDayItem();
     this.endOfDayService.getLatestEndOfDayItems().subscribe(
       items => {
@@ -49,5 +55,19 @@ export class SummaryComponent implements OnInit {
 
   closePriceChart(id: string): Observable<DateValueModel[]>{
     return this.chartData.get(id);
+  }
+
+  selectedTabChanged(index: number) {
+    if (index == 1) {
+      this.newsData.loadData("");
+    }
+  }
+
+  equityChanged(equity: EquityCatalogItem) {
+    if (typeof equity.id === "undefined") {
+      this.newsData.setSearchId("")
+    } else {
+      this.newsData.setSearchId(equity.id)
+    }
   }
 }

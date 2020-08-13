@@ -44,6 +44,16 @@ github.com/pwestlake/equity-fund/commons v0.0.0-20200807093320-3cc1971f86ed h1:d
 github.com/pwestlake/equity-fund/commons v0.0.0-20200807093320-3cc1971f86ed/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
 github.com/pwestlake/equity-fund/commons v0.0.0-20200807101037-df6841bc4355 h1:2jTIUHoAaHArcJna4XLCovNu44KA+M1kSc3iaWQMDGo=
 github.com/pwestlake/equity-fund/commons v0.0.0-20200807101037-df6841bc4355/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200811134315-9f5c386a4526 h1:dDeppw2jLMkat34nK1vhadokOJLdB2+vlt4+XVGm+80=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200811134315-9f5c386a4526/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812130829-eee5c2703050 h1:xfu9CJskRdAk0HH0RVfwkHhgL0LxXdbuoll7KDdujYA=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812130829-eee5c2703050/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812134046-fe370c520743 h1:qlBZenf44W/QbBzsAQsdAUM3j9+EWdS2o2pw0/08WYY=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812134046-fe370c520743/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812134311-5d276f5240e4 h1:z6SM4O1ED2W27JE2vV/+SlAkxb9lgD1eYB5nJdBewcw=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812134311-5d276f5240e4/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812135402-1bc2573faf6d h1:Fd83MOHwppvtpxACUupU+r0JS9w8O3/A9PG/+0u34kg=
+github.com/pwestlake/equity-fund/commons v0.0.0-20200812135402-1bc2573faf6d/go.mod h1:Xem6OzLbPfPKhccbAOWdm5hZRI6NguZx4wTNV35+kTQ=
 github.com/pwestlake/equity-fund/uicontroller v0.0.0-20200729130511-a44b11ba430a/go.mod h1:muLCiQjAZpxx0YJPySQSP9gbTqwZQmm2ufCK8XVhtJ8=
 github.com/smartystreets/assertions v0.0.0-20180927180507-b2de0cb4f26d/go.mod h1:OnSkiWE9lh6wB0YB77sQom3nweQdgAjqCqsofrRNTgc=
 github.com/smartystreets/assertions v1.1.0/go.mod h1:tcbTF8ujkAEcZ8TElKY+i30BzYlVhC/LOxJk7iOWnoo=

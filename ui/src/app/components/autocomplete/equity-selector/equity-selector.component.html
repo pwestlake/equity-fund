@@ -1,0 +1,18 @@
+<form>
+    <mat-form-field fxFlex="1 0 auto">
+        <mat-label>Equity</mat-label>
+        <button *ngIf="equityName.value" matSuffix mat-icon-button
+            aria-label="Clear" 
+            (click)="equityName.setValue(''); equityChanged()">
+            <mat-icon >close</mat-icon>
+        </button>
+        <input type="text" matInput [formControl]="equityName" [matAutocomplete]="auto"
+            (click)="$event.target.select()">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="equityChanged()">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.symbol}}
+            </mat-option>
+        </mat-autocomplete>
+        
+    </mat-form-field>
+</form>

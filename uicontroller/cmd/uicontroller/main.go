@@ -34,6 +34,7 @@ func main() {
 	contextRoutes := routes.InitializeContextRoutes()
 	equityCatalogRoutes := routes.InitializeEquityCatalogRoutes()
 	endOfDayRoutes := routes.InitializeEndOfDayRoutes()
+	newsRoutes := routes.InitializeNewsRoutes()
 
 	r := mux.NewRouter()
 	// GET /title
@@ -66,6 +67,10 @@ func main() {
 	// GET /latest-eod-item/
 	r.Handle("/equity-fund/uicontroller/latest-eod-item", 
 	jwtMiddleware.Handler(http.HandlerFunc(endOfDayRoutes.GetLatestEndOfDayItem))).Methods(http.MethodGet)
+
+	// GET /newsitems/
+	r.Handle("/equity-fund/uicontroller/newsitems", 
+	jwtMiddleware.Handler(http.HandlerFunc(newsRoutes.GetNewsItems))).Methods(http.MethodGet)
 
 	log.Println("Listening on port: ", port)
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))

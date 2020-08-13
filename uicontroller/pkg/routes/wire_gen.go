@@ -34,3 +34,11 @@ func InitializeEndOfDayRoutes() EndOfDayRoutes {
 	endOfDayRoutes := NewEndOfDayRoutes(entitlementsEntitlements, endOfDayService)
 	return endOfDayRoutes
 }
+
+func InitializeNewsRoutes() NewsRoutes {
+	entitlementsEntitlements := entitlements.NewEntitlements()
+	newsItemDAO := dao.NewNewsItemDAO()
+	newsService := service.NewNewsService(newsItemDAO)
+	newsRoutes := NewNewsRoutes(entitlementsEntitlements, newsService)
+	return newsRoutes
+}

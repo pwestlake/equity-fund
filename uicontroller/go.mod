@@ -8,5 +8,5 @@ require (
 	github.com/google/wire v0.4.0
 	github.com/gorilla/mux v1.7.4
 	github.com/pwestlake/aemo/userservice v0.0.0-20200724092340-114ed6aaf5ad
-	github.com/pwestlake/equity-fund/commons v0.0.0-20200807101037-df6841bc4355
+	github.com/pwestlake/equity-fund/commons v0.0.0-20200812135402-1bc2573faf6d
 )

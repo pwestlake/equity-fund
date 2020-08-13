@@ -23,3 +23,8 @@ func InitializeEndOfDayRoutes() EndOfDayRoutes {
 	wire.Build(NewEndOfDayRoutes, entitlements.NewEntitlements, service.NewEndOfDayService, dao.NewEndOfDayItemDAO)
 	return EndOfDayRoutes{}
 }
+
+func InitializeNewsRoutes() NewsRoutes {
+	wire.Build(NewNewsRoutes, entitlements.NewEntitlements, service.NewNewsService, dao.NewNewsItemDAO)
+	return NewsRoutes{}
+}

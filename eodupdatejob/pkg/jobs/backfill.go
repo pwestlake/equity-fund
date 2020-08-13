@@ -76,6 +76,7 @@ func (s *BackFillJob) UpdateWithLatest() {
 	s.updateWithLatestFromMarketstack()
 	s.updateWithLatestFromYahoo()
 	s.FetchLatestNews()
+	log.Printf("Complete.")
 }
 
 // FetchLatestNews ...
@@ -126,6 +127,11 @@ func (s *BackFillJob) updateWithLatestFromMarketstack() {
 		return
 	}
 
+	if len(*catalogItems) == 0 {
+		log.Printf("Nothing to update from marketstack")
+		return
+	}
+	
 	// Find the date of the last update and derive the 'from' date
 	// Assume that all items were updated at the same time
 	eodItem, err := s.endOfDayService.GetLatestItem((*catalogItems)[0].ID)

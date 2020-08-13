@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ContextProvider } from './providers/context.provider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule} from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -26,6 +27,7 @@ import { SummaryComponent } from './views/summary/summary.component';
 import { DateValueComponent } from './components/charts/date-value/date-value.component';
 import { EquitycatalogComponent } from './views/equitycatalog/equitycatalog.component';
 import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycatalogitem.component';
+import { EquitySelectorComponent } from './components/autocomplete/equity-selector/equity-selector.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycata
     SummaryComponent,
     DateValueComponent,
     EquitycatalogComponent,
-    EquitycatalogitemComponent
+    EquitycatalogitemComponent,
+    EquitySelectorComponent
   ],
   imports: [
     BrowserModule,
@@ -42,6 +45,7 @@ import { EquitycatalogitemComponent } from './forms/equitycatalogitem/equitycata
     HttpClientModule,
     FlexLayoutModule,
     FormsModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
