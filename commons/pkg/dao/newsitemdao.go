@@ -118,31 +118,18 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 		expression.Name("sentiment"),
 		expression.Name("title"))
 
+	expr, err := expression.NewBuilder().WithProjection(proj).Build()
+	if err != nil {
+		return nil, err
+	}
+	
 	params := &dynamodb.ScanInput{
 		TableName: aws.String("NewsItems"),
 		Limit: aws.Int64(int64(count)),
+		ExpressionAttributeNames: expr.Names(),
+		ExpressionAttributeValues: expr.Values(),
+		ProjectionExpression: expr.Projection(),
 	}
-
-	var expr expression.Expression
-	var err error
-	if id != nil {
-		filter := expression.Name("catalogref").Equal(expression.Value(*id))
-		expr, err = expression.NewBuilder().WithFilter(filter).WithProjection(proj).Build()
-		if err != nil {
-			return nil, err
-		}
-
-		params.FilterExpression = expr.Filter()
-	} else {
-		expr, err = expression.NewBuilder().WithProjection(proj).Build()
-		if err != nil {
-			return nil, err
-		}
-	}
-	
-	params.ExpressionAttributeNames = expr.Names()
-	params.ExpressionAttributeValues = expr.Values()
-	params.ProjectionExpression = expr.Projection()
 
 	if (offset != nil) {
 		exclusiveStartKeyMap := map[string]*dynamodb.AttributeValue {
@@ -243,4 +230,35 @@ func (s *NewsItemDAO) queryNewsItems(count int, offset *domain.NewsItem, id *str
 	}
 
 	return &newsItems, nil
+}
+
+// GetItem ...
+// Retrieve the news item for the given key id
+func (s *NewsItemDAO) GetItem(id string) (*domain.NewsItem, error){
+	var newsItem = domain.NewsItem{}
+	dbSession := session.Must(session.NewSession())
+	client := dynamodb.New(dbSession, aws.NewConfig().WithEndpoint(s.endpoint).WithRegion(s.region))
+
+	expressionAttributeValues := map[string]*dynamodb.AttributeValue {
+		":id": &dynamodb.AttributeValue{S: aws.String(id)},
+	}
+
+	queryInput := dynamodb.QueryInput {
+		TableName: aws.String("NewsItems"),
+		ExpressionAttributeValues: expressionAttributeValues,
+		KeyConditionExpression: aws.String("id = :id"),
+	}
+
+	resp, err := client.Query(&queryInput)
+	if err != nil {
+		return &domain.NewsItem{}, err
+	}
+
+	if *resp.Count == 0 {
+		return nil, errors.New("Item not found")
+	}
+
+	err = dynamodbattribute.UnmarshalMap(resp.Items[0],  &newsItem)
+	
+	return &newsItem, err
 }

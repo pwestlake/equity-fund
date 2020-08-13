@@ -33,3 +33,8 @@ func (s *NewsService) GetLatestItem(id string) (*domain.NewsItem, error) {
 func (s *NewsService) GetNewsItems(count int, offset *domain.NewsItem, id *string) (*[]domain.NewsItem, error) {
 	return s.newsItemDao.GetNewsItems(count, offset, id)
 }
+
+// GetItem ...
+func (s *NewsService) GetItem(count int, offset *domain.NewsItem, id *string) (*domain.NewsItem, error) {
+	return s.newsItemDao.GetItem(*id)
+}
