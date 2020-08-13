@@ -207,6 +207,7 @@ func (s *NewsItemDAO) queryNewsItems(count int, offset *domain.NewsItem, id *str
 		ExpressionAttributeNames: expr.Names(),
 		KeyConditionExpression: aws.String("catalogref = :catalogref"),
 		Limit: aws.Int64(int64(count)),
+		ScanIndexForward: aws.Bool(false),
 		ProjectionExpression: expr.Projection(),
 	}
 
