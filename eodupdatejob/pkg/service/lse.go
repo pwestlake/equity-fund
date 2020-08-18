@@ -101,7 +101,6 @@ func (s *LSEService) GetNewsFromDate(item *commonsDomain.EquityCatalogItem, from
 
 		if date.After(from) {
 			article := s.getNewsArticle(v)
-			log.Printf("%s", article)
 			newsItem := commonsDomain.NewsItem{
 				CatalogRef:  item.ID,
 				CompanyCode: v.CompanyCode,
