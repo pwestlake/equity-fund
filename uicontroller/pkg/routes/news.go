@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"regexp"
+	"github.com/gorilla/mux"
 	"time"
 	"github.com/pwestlake/equity-fund/commons/pkg/domain"
 	"encoding/json"
@@ -85,3 +87,30 @@ func (s *NewsRoutes) GetNewsItems(w http.ResponseWriter, r *http.Request) {
 	s.Route.Handle(w, r, getNewsItems)
 }
 
+// GetNewsItem ...
+func (s *NewsRoutes) GetNewsItem(w http.ResponseWriter, r *http.Request) {
+	getNewsItem := func(w http.ResponseWriter, r *http.Request) commons.HTTPResponse {
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		item, err := s.newsService.GetItem(id)
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusNotFound,
+				Body: fmt.Sprintf("Failed to get news item for %s. %s", id, err.Error())}
+		}
+
+		regx := regexp.MustCompile(`\\n`)
+		item.Content = regx.ReplaceAllString(item.Content, "<br>")
+		
+		itemJSON, err := json.Marshal(*item)
+		if err != nil {
+			return &commons.HTTPErrorResponse{
+				StatusCode: http.StatusInternalServerError,
+				Body: fmt.Sprintf("Unable to marshal data for news item, error: %s", err.Error())}
+		}
+		return &commons.HTTPSuccessResponse{Body: itemJSON}
+	}
+
+	s.Route.Handle(w, r, getNewsItem)
+}

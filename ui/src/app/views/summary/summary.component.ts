@@ -10,6 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { NewsDataSource } from './newsdatasource';
 import { NewsService } from 'src/app/services/news.service';
+import { NewsItemModel } from 'src/data/newsitem.model';
 
 @Component({
   selector: 'app-summary',
@@ -24,6 +25,7 @@ export class SummaryComponent implements OnInit {
   tableData: MatTableDataSource<EndOfDayItem>;
   latest: Observable<EndOfDayItem>;
   newsData: NewsDataSource;
+  newsItem: Observable<NewsItemModel>
 
   constructor(private equityCatalogService: EquitycatalogService, 
     private endOfDayService: EodService,
@@ -33,6 +35,21 @@ export class SummaryComponent implements OnInit {
   sort: MatSort;
 
   ngOnInit(): void {
+    this.newsItem = new Observable<NewsItemModel>(observer => {
+      const item: NewsItemModel = {
+        id: undefined,
+        catalogref: undefined,
+        companycode: undefined,
+        companyname: undefined,
+        content: "",
+        datetime: undefined,
+        sentiment: undefined,
+        title: ""
+      }
+      observer.next(item);
+      observer.complete();
+    });
+
     this.newsData = new NewsDataSource(this.newsService);
     this.latest = this.endOfDayService.getLatestEndOfDayItem();
     this.endOfDayService.getLatestEndOfDayItems().subscribe(
@@ -69,5 +86,11 @@ export class SummaryComponent implements OnInit {
     } else {
       this.newsData.setSearchId(equity.id)
     }
+  }
+
+  selectNewsItem(index: number) {
+    this.newsData.toggleItemSelection(index);
+    const item: NewsItemModel = this.newsData.getItemAtIndex(index);
+    this.newsItem = this.newsService.getNewsItem(item.id)
   }
 }

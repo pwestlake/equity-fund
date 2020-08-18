@@ -23,6 +23,7 @@ func InitializeBackFillJob() BackFillJob {
 	endOfDayService := service2.NewEndOfDayService(endOfDayItemDAO)
 	newsItemDAO := dao.NewNewsItemDAO()
 	newsService := service2.NewNewsService(newsItemDAO)
-	backFillJob := NewBackFillJob(marketStackService, yahooService, lseService, equityCatalogService, endOfDayService, newsService)
+	nlpService := service.NewNLPService()
+	backFillJob := NewBackFillJob(marketStackService, yahooService, lseService, equityCatalogService, endOfDayService, newsService, nlpService)
 	return backFillJob
 }

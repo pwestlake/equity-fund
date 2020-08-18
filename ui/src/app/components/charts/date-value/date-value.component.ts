@@ -73,13 +73,21 @@ export class DateValueComponent implements OnChanges {
       .range([0, contentWidth])
 
     const yLine = d3.scaleLinear()
-      .domain([0, d3.max(this.data, d => {
-        if (typeof(this.maxY) == 'undefined') {
-          return d.value
-        }
-        return d.value > this.maxY ? this.maxY : d.value;
+      .domain([
+        d3.min(this.data, d => {
+          return d.value < 0 ? 0 : d.value;
+        }), 
+        d3.max(this.data, d => {
+          if (typeof(this.maxY) == 'undefined') {
+            return d.value
+          }
+          return d.value > this.maxY ? this.maxY : d.value;
         })])
-      .range([contentHeight, this.margin.top])
+      .range([contentHeight, 0])
+
+    const chartline = d3.line()
+      .x(d => xLine((Date.parse(d.date))))
+      .y(d => yLine(d.value));
 
     const line = d3.line()
       .x(d => xLine(d[0]))
@@ -100,7 +108,11 @@ export class DateValueComponent implements OnChanges {
     const y = d3
       .scaleLinear()
       .rangeRound([contentHeight, 0])
-      .domain([0, d3.max(data, d => {
+      .domain([
+        d3.min(this.data, d => {
+          return d.value < 0 ? 0 : d.value;
+        }), 
+        d3.max(data, d => {
           if (typeof(this.maxY) == 'undefined') {
             return d.value
           }
@@ -124,27 +136,33 @@ export class DateValueComponent implements OnChanges {
         .attr('text-anchor', 'end')
         .text('Count');
 
-    g.selectAll('.chart-primary')
-      .data(data)
-      .enter().append('rect')
-        .attr('class', 'chart-primary')
-        .attr('x', (d, i) => x(i.toString()))
-        .attr('y', d => {
-            if (typeof(this.maxY) == 'undefined') {
-              return y(d.value);
-            }
-            return y(d.value > this.maxY ? this.maxY : d.value)
-          })
-        .attr('width', x.bandwidth)
-        .attr('height', d => {
-            if (typeof(this.maxY) == 'undefined') {
-              return contentHeight - y(d.value);
-            }
-            return contentHeight - y(d.value > this.maxY ? this.maxY : d.value)
-          })
-        .attr('transform', 'translate(0,0)')
-        .on("mouseover", d => this.showTooltip(d, tooltip, svg, element.offsetWidth))					
-        .on("mouseout", d => this.hideTooltip(tooltip));
+    g.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "#c8e6c9")
+      .attr("stroke-width", 2)
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("d", chartline);
+      // .enter().append('rect')
+      //   .attr('class', 'chart-primary')
+      //   .attr('x', (d, i) => x(i.toString()))
+      //   .attr('y', d => {
+      //       if (typeof(this.maxY) == 'undefined') {
+      //         return y(d.value);
+      //       }
+      //       return y(d.value > this.maxY ? this.maxY : d.value)
+      //     })
+      //   .attr('width', x.bandwidth)
+      //   .attr('height', d => {
+      //       if (typeof(this.maxY) == 'undefined') {
+      //         return contentHeight - y(d.value);
+      //       }
+      //       return contentHeight - y(d.value > this.maxY ? this.maxY : d.value)
+      //     })
+      //   .attr('transform', 'translate(0,0)')
+      //   .on("mouseover", d => this.showTooltip(d, tooltip, svg, element.offsetWidth))					
+      //   .on("mouseout", d => this.hideTooltip(tooltip));
 
     g.append("path")
       .datum(this.average)

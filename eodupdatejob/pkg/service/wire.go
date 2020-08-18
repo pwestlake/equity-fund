@@ -20,3 +20,8 @@ func InitializeLSEService() LSEService {
 	wire.Build(NewLSEService)
 	return LSEService{}
 }
+
+func InitializeNLPService() NLPService {
+	wire.Build(NewNLPService)
+	return NLPService{}
+}

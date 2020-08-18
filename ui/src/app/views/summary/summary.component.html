@@ -1,4 +1,4 @@
-<mat-tab-group #tabs backgroundColor="primary" style="width:100vw;" dynamicHeight="true" 
+<mat-tab-group #tabs color="accent" backgroundColor="primary" style="width:100vw;" dynamicHeight="true" 
     paginationDisabled="false"
     (selectedTabChange)="selectedTabChanged(tabs.selectedIndex)" 
     fxFlex="1 1 auto">
@@ -117,28 +117,45 @@
                     </div>
                 </div>
             </mat-drawer>
-
+    
             <mat-drawer-content fxFlex="1 1 auto">
-                <div fxLayout="row" fxLayoutAlign="space-around center" class="table-header-row">
-                    <div class="table-header-cell" style="width: 120px">Date</div>
-                    <div class="table-header-cell" style="width: 90px">Ticker</div>
-                    <div class="table-header-cell" style="width: 250px">Company</div>
-                    <div class="table-header-cell" style="width: 90px">Sentiment</div>
-                    <div class="table-header-cell" fxFlex>Title</div>
-                </div>
-            
-                <cdk-virtual-scroll-viewport itemSize="48" minBufferPx="640" maxBufferPx="800" class="newstable-container table-body">
-                
-                    <div fxLayout="row" fxLayoutAlign="space-between center" class="table-row" 
-                        *cdkVirtualFor="let item of newsData">
-                        <div class="table-cell" style="width: 120px">{{ item.datetime | date:'mediumDate' }}</div>
-                        <div class="table-cell" style="width: 90px">{{ item.companycode }}</div>
-                        <div class="table-cell" style="width: 250px">{{ item.companyname }}</div>
-                        <div class="table-cell" style="width: 90px">{{ item.sentiment }}</div>
-                        <div class="table-cell" fxFlex>{{ item.title }}</div>
+                <div fxFlex="67">
+                    <div fxLayout="row" fxLayoutAlign="space-around center" class="table-header-row">
+                        <div class="table-header-cell" style="width: 48px"></div>
+                        <div class="table-header-cell" style="width: 120px">Date</div>
+                        <div class="table-header-cell" style="width: 90px">Ticker</div>
+                        <div class="table-header-cell" style="width: 250px">Company</div>
+                        <div class="table-header-cell" style="width: 90px">Sentiment</div>
+                        <div class="table-header-cell" fxFlex>Title</div>
                     </div>
+                
+                    <cdk-virtual-scroll-viewport itemSize="48" minBufferPx="640" maxBufferPx="800" class="newstable-container table-body">
+                    
+                        <div fxLayout="row" fxLayoutAlign="space-between center" class="table-row" 
+                            [ngClass]="{'table-row-selected': item.selected}"
+                            *cdkVirtualFor="let item of newsData; index as i" (click)="selectNewsItem(i)">
+                            <div class="table-cell" style="width: 48px">
+                                <mat-checkbox [checked]="item.selected"></mat-checkbox></div>
+                            <div class="table-cell" style="width: 120px">{{ item.datetime | date:'mediumDate' }}</div>
+                            <div class="table-cell" style="width: 90px">{{ item.companycode }}</div>
+                            <div class="table-cell" style="width: 250px">{{ item.companyname }}</div>
+                            <div class="table-cell" style="width: 90px">{{ item.sentiment }}</div>
+                            <div class="table-cell" fxFlex>{{ item.title }}</div>
+                        </div>
 
-                </cdk-virtual-scroll-viewport>
+                    </cdk-virtual-scroll-viewport>
+                </div>
+                <div fxFlex="33">
+                    <mat-card fxLayout="column" fxFlex="1 1 auto" class="news-card">
+                        <mat-card-header>
+                            <mat-card-title>{{(newsItem | async).title}}</mat-card-title>
+                        </mat-card-header>
+
+                        <mat-card-content fxFlex="1 1 auto">
+                            <div [innerHTML]="(newsItem | async).content"></div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
             </mat-drawer-content>
         </mat-drawer-container>
     </mat-tab>

@@ -2093,6 +2093,14 @@ th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
   color: white;
   border-color: rgba(211, 211, 211, 0.12); }
 
+.table-row:hover {
+  background-color: dimgray;
+  color: white; }
+
+.table-row-selected {
+  background-color: #c8e6c9;
+  color: black; }
+
 .table-header-row {
   background-color: #424242;
   border-color: rgba(255, 255, 255, 0.7); }

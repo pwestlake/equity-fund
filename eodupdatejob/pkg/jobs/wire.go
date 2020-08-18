@@ -14,6 +14,7 @@ func InitializeBackFillJob() BackFillJob {
 		service.NewLSEService,
 		commons.NewEquityCatalogService, dao.NewEquityCatalogItemDAO,
 		commons.NewEndOfDayService, dao.NewEndOfDayItemDAO,
-		commons.NewNewsService, dao.NewNewsItemDAO)
+		commons.NewNewsService, dao.NewNewsItemDAO,
+		service.NewNLPService)
 	return BackFillJob{}
 }

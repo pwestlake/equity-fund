@@ -31,6 +31,12 @@ app-summary {
     }
 
     .newstable-container {
+        height: calc(100vh - 112px - 56px);
+    }
+
+    .news-card {
+        margin: 0px 0px 0px 10px;
         height: calc(100vh - 112px);
+        overflow: scroll;
     }
 }

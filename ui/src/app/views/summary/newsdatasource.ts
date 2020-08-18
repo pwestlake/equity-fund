@@ -2,12 +2,14 @@ import { CollectionViewer, DataSource } from "@angular/cdk/collections";
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { NewsItemModel } from '../../../data/newsitem.model';
+import { NewsItemViewModel } from '../../../data/newsitem.model';
 import { NewsService } from "../../services/news.service";
+import { map } from 'rxjs/operators';
 
-export class NewsDataSource extends DataSource<NewsItemModel> {
+export class NewsDataSource extends DataSource<NewsItemViewModel> {
 
-    private cache = Array.from<NewsItemModel>({ length: 0 });
-    private newsSubject = new BehaviorSubject<NewsItemModel[]>(this.cache);
+    private cache = Array.from<NewsItemViewModel>({ length: 0 });
+    private newsSubject = new BehaviorSubject<NewsItemViewModel[]>(this.cache);
     
     private subscription = new Subscription();
 
@@ -20,7 +22,7 @@ export class NewsDataSource extends DataSource<NewsItemModel> {
         super();
     }
 
-    connect(collectionViewer: CollectionViewer): Observable<NewsItemModel[]> {
+    connect(collectionViewer: CollectionViewer): Observable<NewsItemViewModel[]> {
         this.subscription.add(collectionViewer.viewChange.subscribe(range => {
             if (range.end >= this.cache.length) {
                 this.loadData("");
@@ -54,9 +56,36 @@ export class NewsDataSource extends DataSource<NewsItemModel> {
             catchError(() => of([]))
         )
         .subscribe(data => {
-            this.cache = this.cache.concat(data);
+            const viewData: NewsItemViewModel[] = (data as NewsItemModel[]).map((item) => <NewsItemViewModel> {
+                catalogref: item.catalogref,
+                selected: false,
+                id: item.id,
+                companycode: item.companycode,
+                companyname: item.companyname,
+                content: item.content,
+                datetime: item.datetime,
+                sentiment: item.sentiment,
+                title: item.title
+            });
+            this.cache = this.cache.concat(viewData);
             this.newsSubject.next(this.cache);
         });
     }  
 
+    getItemAtIndex(index: number): NewsItemModel {
+        const item = this.cache[index];
+        return item;
+    }
+
+    toggleItemSelection(index: number) {
+        this.cache[index].selected = !this.cache[index].selected
+        if (this.cache[index].selected) {
+            // Ensure single selection
+            this.cache.forEach((v, i) => {
+                if (v.selected && i != index) {
+                    v.selected = false;
+                }
+            });
+        }
+    }
 }

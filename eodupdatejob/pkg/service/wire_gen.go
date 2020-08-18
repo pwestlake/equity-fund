@@ -21,3 +21,8 @@ func InitializeLSEService() LSEService {
 	lseService := NewLSEService()
 	return lseService
 }
+
+func InitializeNLPService() NLPService {
+	nlpService := NewNLPService()
+	return nlpService
+}

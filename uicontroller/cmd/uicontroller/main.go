@@ -72,6 +72,10 @@ func main() {
 	r.Handle("/equity-fund/uicontroller/newsitems", 
 	jwtMiddleware.Handler(http.HandlerFunc(newsRoutes.GetNewsItems))).Methods(http.MethodGet)
 
+	// GET /newsitem/{id}
+	r.Handle("/equity-fund/uicontroller/newsitem/{id}", 
+	jwtMiddleware.Handler(http.HandlerFunc(newsRoutes.GetNewsItem))).Methods(http.MethodGet)
+
 	log.Println("Listening on port: ", port)
     log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }

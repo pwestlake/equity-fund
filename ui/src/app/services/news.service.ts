@@ -20,4 +20,8 @@ export class NewsService {
         .set('count', count.toString())
     });
   }
+
+  getNewsItem(id: string): Observable<NewsItemModel> {
+    return this.http.get<NewsItemModel>(`${environment.host}/equity-fund/uicontroller/newsitem/` + id);
+  }
 }

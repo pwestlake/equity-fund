@@ -17,6 +17,7 @@ type BackFillJob struct {
 	equityCatalogService commons.EquityCatalogService
 	endOfDayService commons.EndOfDayService
 	newsService commons.NewsService
+	nlpService service.NLPService
 }
 
 // NewBackFillJob ...
@@ -26,14 +27,16 @@ func NewBackFillJob(dataService service.MarketStackService,
 	lseService service.LSEService,
 	equityCatalogService commons.EquityCatalogService,
 	endOfDayService commons.EndOfDayService,
-	newsService commons.NewsService) BackFillJob {
+	newsService commons.NewsService,
+	nlpService service.NLPService) BackFillJob {
 	return BackFillJob{
 		dataService: dataService,
 		yahooService: yahooService,
 		lseService: lseService,
 		equityCatalogService: equityCatalogService,
 		endOfDayService: endOfDayService,
-		newsService: newsService}
+		newsService: newsService,
+		nlpService: nlpService}
 }
 
 // Run ...
@@ -113,6 +116,14 @@ func (s *BackFillJob) FetchLatestNews() {
 
 		log.Printf("Found %d news item%s for %s", len(*newsItems), plural, v.Symbol)
 
+		for i, v := range *newsItems {
+			sentiment, err := s.nlpService.GetSentiment(&v.Content)
+			if err != nil {
+				log.Printf("Failed to get sentiment for %s. %s", v.Title, err.Error())
+			}
+			(*newsItems)[i].Sentiment = sentiment
+		}
+
 		err = s.newsService.PutNewsItems(newsItems)
 		if (err != nil) {
 			log.Printf("Failed to persist news items for %s. %s", v.Symbol, err.Error())
@@ -131,7 +142,7 @@ func (s *BackFillJob) updateWithLatestFromMarketstack() {
 		log.Printf("Nothing to update from marketstack")
 		return
 	}
-	
+
 	// Find the date of the last update and derive the 'from' date
 	// Assume that all items were updated at the same time
 	eodItem, err := s.endOfDayService.GetLatestItem((*catalogItems)[0].ID)
