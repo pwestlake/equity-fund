@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${workspaceFolder}/eodupdatejob/cmd/main.go",
-            "env": {},
+            "env": {"GOOGLE_APPLICATION_CREDENTIALS":"/Users/phil/Projects/equity-fund/EquityFund-b5a46059bc2b.json"},
             "args": []
         },
         {
