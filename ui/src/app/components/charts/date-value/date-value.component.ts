@@ -139,7 +139,7 @@ export class DateValueComponent implements OnChanges {
     g.append("path")
       .datum(data)
       .attr("fill", "none")
-      .attr("stroke", "#c8e6c9")
+      .attr("stroke", "#42a5f5")
       .attr("stroke-width", 2)
       .attr("stroke-linejoin", "round")
       .attr("stroke-linecap", "round")
@@ -308,6 +308,9 @@ export class DateValueComponent implements OnChanges {
       if (i >= 7) {
         rollingAverage -= (this.data[i - 7].value / 7);
         value = rollingAverage;
+      }
+      else {
+        value = this.data[i].value;
       }
 
       const item: [number, number] = [new Date(this.data[i].date).getTime(), value];
