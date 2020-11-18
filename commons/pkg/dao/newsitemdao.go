@@ -154,7 +154,7 @@ func (s *NewsItemDAO) GetNewsItems(count int, offset *domain.NewsItem, id *strin
 
 		newsItems = append(newsItems, items...)
 		
-		if result.LastEvaluatedKey != nil {
+		if len(newsItems) < count && result.LastEvaluatedKey != nil {
 			params.ExclusiveStartKey = result.LastEvaluatedKey
 		} else {
 			complete = true
@@ -222,7 +222,7 @@ func (s *NewsItemDAO) queryNewsItems(count int, offset *domain.NewsItem, id *str
 
 		newsItems = append(newsItems, items...)
 		
-		if result.LastEvaluatedKey != nil {
+		if len(newsItems) < count && result.LastEvaluatedKey != nil {
 			params.ExclusiveStartKey = result.LastEvaluatedKey
 		} else {
 			complete = true
